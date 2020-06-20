@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import EmptyForm
 from django.views.generic import TemplateView
 from django.http import JsonResponse
+from .tasks import start_watching
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -16,7 +17,7 @@ class HomeView(TemplateView):
     def post(self, request, *args, **kwargs):
         if 'file_url' in request.POST:
             # start a worker task for processing file located at file_url
-            res = start_listening.apply_async(
+            res = start_watching.apply_async(
                 (request.POST['file_url'],),
                 time_limit=60 * 20,
                 soft_time_limit=60 * 15
