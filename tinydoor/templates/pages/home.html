@@ -1,70 +1,73 @@
 {% extends "base.html" %}
 
-{% block scripts %}
-{{ block.super }}
-<script src="https://transloadit.edgly.net/releases/uppy/v1.7.0/uppy.min.js"></script>
-<script src="//transloadit.edgly.net/releases/uppy/robodog/v1.4.1/robodog.min.js"></script>
-<button id="browse">Select Files</button>
-<script>
-/* ajax for handling file uploads */
-$("#emptyForm").submit(function (event) {
-    event.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "/",
-        data: {
-            file_url: "asf",
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-        },
-        success: function(data) {
-            window.location.href += data.task_id;
-        }
+    {% block content %}
+        <button id="browse">Select Files</button>
+    {% endblock content %}
+    {% block javascript %}
+    {{ block.super }}
+    <script src="https://transloadit.edgly.net/releases/uppy/v1.7.0/uppy.min.js"></script>
+    <script src="//transloadit.edgly.net/releases/uppy/robodog/v1.4.1/robodog.min.js"></script>
+    <script>
+    /* ajax for handling file uploads */
+    $("#emptyForm").submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/",
+            data: {
+                file_url: "asf",
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function(data) {
+                window.location.href += data.task_id;
+            }
+        });
     });
-});
 
-function startWatching(furl) {
-    $.ajax({
-        type: "POST",
-        url: "/",
-        data: {
-            file_url: furl,
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-        },
-        success: function(data) {
-            // Once the task is started, redirect to results page
-            window.location.href += data.task_id;
-        }
-    });
-}
+    function startWatching(furl) {
+        $.ajax({
+            type: "POST",
+            url: "/",
+            data: {
+                file_url: furl,
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function(data) {
+                // Once the task is started, redirect to results page
+                window.location.href += data.task_id;
+            }
+        });
+    }
 
-/*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TRANSLOADIT
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    TRANSLOADIT
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-document.getElementById("browse").addEventListener("click", function () {
-    var uppy = window.Robodog.pick({
-        providers: [ "instagram", "url", "webcam", "dropbox", "google-drive" ],
-        waitForEncoding: true,
-        params: {
-            // To avoid tampering, use Signature Authentication
-            auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
-            template_id: '85def6ad6f4b437182fb715cdd45977f'
-        }
-    }).then(function (bundle) {
-        // Due to `waitForEncoding: true` this is fired after encoding is done.
-        // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
-        // for Async Mode where your back-end receives the encoding results
-        // so that your user can be on their way as soon as the upload completes.
-        console.log(bundle.transloadit) // Array of Assembly Statuses
-        console.log(bundle.results)     // Array of all encoding results
+    document.getElementById("browse").addEventListener("click", function () {
+        var uppy = window.Robodog.pick({
+            providers: [ "instagram", "url", "webcam", "dropbox", "google-drive" ],
+            waitForEncoding: true,
+            params: {
+                // To avoid tampering, use Signature Authentication
+                auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
+                template_id: '85def6ad6f4b437182fb715cdd45977f'
+            }
+        }).then(function (bundle) {
+            // Due to `waitForEncoding: true` this is fired after encoding is done.
+            // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
+            // for Async Mode where your back-end receives the encoding results
+            // so that your user can be on their way as soon as the upload completes.
+            console.log(bundle.transloadit) // Array of Assembly Statuses
+            console.log(bundle.results)     // Array of all encoding results
 
-        // start. that. pipeliiiiinnneee!
-        startWatching(bundle.results[0].ssl_url);
-    }).catch(console.error)
-})
-</script>
+            // start. that. pipeliiiiinnneee!
+            startWatching(bundle.results[0].ssl_url);
+        }).catch(console.error)
+    })
+    </script>
 
-{% endblock scripts %}
+    {% endblock javascript %}
+
 
 
 
