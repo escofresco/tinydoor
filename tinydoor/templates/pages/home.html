@@ -22,7 +22,7 @@ $("#emptyForm").submit(function (event) {
     });
 });
 
-function startListening(furl) {
+function startWatching(furl) {
     $.ajax({
         type: "POST",
         url: "/",
@@ -59,7 +59,7 @@ document.getElementById("browse").addEventListener("click", function () {
         console.log(bundle.results)     // Array of all encoding results
 
         // start. that. pipeliiiiinnneee!
-        startListening(bundle.results[0].ssl_url);
+        startWatching(bundle.results[0].ssl_url);
     }).catch(console.error)
 })
 </script>
