@@ -4,8 +4,8 @@
 {{ block.super }}
 <script src="https://transloadit.edgly.net/releases/uppy/v1.7.0/uppy.min.js"></script>
 <script src="//transloadit.edgly.net/releases/uppy/robodog/v1.4.1/robodog.min.js"></script>
+<button id="browse">Select Files</button>
 <script>
-
 /* ajax for handling file uploads */
 $("#emptyForm").submit(function (event) {
     event.preventDefault();
@@ -46,9 +46,9 @@ document.getElementById("browse").addEventListener("click", function () {
         providers: [ "instagram", "url", "webcam", "dropbox", "google-drive" ],
         waitForEncoding: true,
         params: {
-            // TODO: Use Signature Authentication
-            auth: { key: "20ff383b0b2b49a79643d1874edf5a3f" },
-            template_id: "d90b12519a964166ac0aac71b53fc4e0"
+            // To avoid tampering, use Signature Authentication
+            auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
+            template_id: '85def6ad6f4b437182fb715cdd45977f'
         }
     }).then(function (bundle) {
         // Due to `waitForEncoding: true` this is fired after encoding is done.
@@ -65,3 +65,6 @@ document.getElementById("browse").addEventListener("click", function () {
 </script>
 
 {% endblock scripts %}
+
+
+
