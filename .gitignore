@@ -289,3 +289,5 @@ tinydoor/media/
 .env
 .envs/*
 !.envs/.local/
+
+package-lock.json
