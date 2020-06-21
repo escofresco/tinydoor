@@ -291,3 +291,4 @@ tinydoor/media/
 !.envs/.local/
 
 package-lock.json
+dump.rdb
