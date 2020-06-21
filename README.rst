@@ -1,7 +1,7 @@
 tinydoor
 ========
 
-A platform for giving and receiving help
+Customer analytics for retailers
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
@@ -86,6 +86,37 @@ Please note: For Celery's import magic to work, it is important *where* the cele
 
 
 
+<<<<<<< HEAD
+=======
+Email Server
+^^^^^^^^^^^^
+
+In development, it is often nice to be able to see emails that are being sent from your application. If you choose to use `MailHog`_ when generating the project a local SMTP server with a web interface will be available.
+
+#. `Download the latest MailHog release`_ for your OS.
+
+#. Rename the build to ``MailHog``.
+
+#. Copy the file to the project root.
+
+#. Make it executable: ::
+
+    $ chmod +x MailHog
+
+#. Spin up another terminal window and start it there: ::
+
+    ./MailHog
+
+#. Check out `<http://127.0.0.1:8025/>`_ to see how it goes.
+
+Now you have your own mail server running locally, ready to receive whatever you send it.
+
+.. _`Download the latest MailHog release`: https://github.com/mailhog/MailHog/releases
+
+.. _mailhog: https://github.com/mailhog/MailHog
+
+
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 Sentry
 ^^^^^^
@@ -121,6 +152,11 @@ Bootstrap v4 is installed using npm and customised by tweaking your variables in
 You can find a list of available variables `in the bootstrap source`_, or get explanations on them in the `Bootstrap docs`_.
 
 
+<<<<<<< HEAD
+=======
+Bootstrap's javascript as well as its dependencies is concatenated into a single file: ``static/js/vendors.js``.
+
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 .. _in the bootstrap source: https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss
 .. _Bootstrap docs: https://getbootstrap.com/docs/4.1/getting-started/theming/
