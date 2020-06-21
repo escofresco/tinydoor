@@ -1,21 +1,12 @@
 import pytest
 from celery.result import EagerResult
 
-<<<<<<< HEAD
-
-from tinydoor.users.tasks import get_users_count
-from tinydoor.users.tests.factories import UserFactory
-
-
-@pytest.mark.django_db
-=======
 from tinydoor.users.tasks import get_users_count
 from tinydoor.users.tests.factories import UserFactory
 
 pytestmark = pytest.mark.django_db
 
 
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 def test_user_count(settings):
     """A basic test to execute the get_users_count Celery task."""
     UserFactory.create_batch(3)

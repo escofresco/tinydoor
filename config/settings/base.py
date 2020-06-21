@@ -1,16 +1,6 @@
 """
 Base settings to build other settings files upon.
 """
-<<<<<<< HEAD
-
-import environ
-
-ROOT_DIR = (
-    environ.Path(__file__) - 3
-)  # (tinydoor/config/settings/base.py - 3 = tinydoor/)
-APPS_DIR = ROOT_DIR.path("tinydoor")
-
-=======
 from pathlib import Path
 
 import environ
@@ -18,17 +8,12 @@ import environ
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # tinydoor/
 APPS_DIR = ROOT_DIR / "tinydoor"
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
-<<<<<<< HEAD
-    env.read_env(str(ROOT_DIR.path(".env")))
-=======
     env.read_env(str(ROOT_DIR / ".env"))
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -50,11 +35,7 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
-<<<<<<< HEAD
-LOCALE_PATHS = [ROOT_DIR.path("locale")]
-=======
 LOCALE_PATHS = [str(ROOT_DIR / "locale")]
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -90,14 +71,9 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-<<<<<<< HEAD
-    "rest_framework",
-    "django_celery_beat",
-=======
     "django_celery_beat",
     "rest_framework",
     "rest_framework.authtoken",
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 ]
 
 LOCAL_APPS = [
@@ -186,11 +162,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-<<<<<<< HEAD
-MEDIA_ROOT = str(APPS_DIR("media"))
-=======
 MEDIA_ROOT = str(APPS_DIR / "media")
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -202,11 +174,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-<<<<<<< HEAD
-        "DIRS": [str(APPS_DIR.path("templates"))],
-=======
         "DIRS": [str(APPS_DIR / "templates")],
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -239,11 +207,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
-<<<<<<< HEAD
-FIXTURE_DIRS = (str(APPS_DIR.path("fixtures")),)
-=======
 FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 # SECURITY
 # ------------------------------------------------------------------------------
@@ -262,11 +226,7 @@ X_FRAME_OPTIONS = "DENY"
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
 )
-<<<<<<< HEAD
-# https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
-=======
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 EMAIL_TIMEOUT = 5
 
 # ADMIN
@@ -274,11 +234,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-<<<<<<< HEAD
-ADMINS = [("""Jonasz Rice""", "jonaszakr@gmail.com")]
-=======
 ADMINS = [("""Ashab Siddiqui, Jonasz Rice, Uyen Nguyen, Zain Raza""", "jonaszakr@gmail.com")]
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -349,9 +305,6 @@ SOCIALACCOUNT_ADAPTER = "tinydoor.users.adapters.SocialAccountAdapter"
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
 INSTALLED_APPS += ["compressor"]
 STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
-<<<<<<< HEAD
-
-=======
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
@@ -362,6 +315,5 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 # Your stuff...
 # ------------------------------------------------------------------------------

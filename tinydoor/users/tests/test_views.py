@@ -1,10 +1,4 @@
 import pytest
-<<<<<<< HEAD
-from django.test import RequestFactory
-
-from tinydoor.users.models import User
-from tinydoor.users.views import UserRedirectView, UserUpdateView
-=======
 from django.contrib.auth.models import AnonymousUser
 from django.http.response import Http404
 from django.test import RequestFactory
@@ -16,7 +10,6 @@ from tinydoor.users.views import (
     UserUpdateView,
     user_detail_view,
 )
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 pytestmark = pytest.mark.django_db
 

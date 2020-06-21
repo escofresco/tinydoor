@@ -1,9 +1,5 @@
 import pytest
-<<<<<<< HEAD
-from django.urls import reverse, resolve
-=======
 from django.urls import resolve, reverse
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 from tinydoor.users.models import User
 

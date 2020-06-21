@@ -1,8 +1,4 @@
 import os
-<<<<<<< HEAD
-=======
-
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.

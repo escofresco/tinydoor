@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from django.contrib.auth import get_user_model, forms
-=======
 from django.contrib.auth import forms, get_user_model
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 

@@ -1,11 +1,7 @@
 tinydoor
 ========
 
-<<<<<<< HEAD
-A platform for giving and receiving help
-=======
 Customer analytics for retailers
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/

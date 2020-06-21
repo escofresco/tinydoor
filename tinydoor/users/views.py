@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.views.generic import DetailView, RedirectView, UpdateView
-from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
-=======
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 User = get_user_model()
 
