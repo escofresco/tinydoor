@@ -23,30 +23,18 @@ class TestUserUpdateView:
         https://github.com/pytest-dev/pytest-django/pull/258
     """
 
-<<<<<<< HEAD
-    def test_get_success_url(self, user: User, request_factory: RequestFactory):
-        view = UserUpdateView()
-        request = request_factory.get("/fake-url/")
-=======
     def test_get_success_url(self, user: User, rf: RequestFactory):
         view = UserUpdateView()
         request = rf.get("/fake-url/")
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
         request.user = user
 
         view.request = request
 
         assert view.get_success_url() == f"/users/{user.username}/"
 
-<<<<<<< HEAD
-    def test_get_object(self, user: User, request_factory: RequestFactory):
-        view = UserUpdateView()
-        request = request_factory.get("/fake-url/")
-=======
     def test_get_object(self, user: User, rf: RequestFactory):
         view = UserUpdateView()
         request = rf.get("/fake-url/")
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
         request.user = user
 
         view.request = request
@@ -55,22 +43,14 @@ class TestUserUpdateView:
 
 
 class TestUserRedirectView:
-<<<<<<< HEAD
-    def test_get_redirect_url(self, user: User, request_factory: RequestFactory):
-        view = UserRedirectView()
-        request = request_factory.get("/fake-url")
-=======
     def test_get_redirect_url(self, user: User, rf: RequestFactory):
         view = UserRedirectView()
         request = rf.get("/fake-url")
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
         request.user = user
 
         view.request = request
 
         assert view.get_redirect_url() == f"/users/{user.username}/"
-<<<<<<< HEAD
-=======
 
 
 class TestUserDetailView:
@@ -97,4 +77,3 @@ class TestUserDetailView:
 
         with pytest.raises(Http404):
             user_detail_view(request, username="username")
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
