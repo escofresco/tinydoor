@@ -1,8 +1,13 @@
 import os
+<<<<<<< HEAD
+=======
+from pathlib import Path
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 from typing import Sequence
 
 import pytest
 
+<<<<<<< HEAD
 ROOT_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 PRODUCTION_DOTENVS_DIR_PATH = os.path.join(ROOT_DIR_PATH, ".envs", ".production")
 PRODUCTION_DOTENV_FILE_PATHS = [
@@ -10,6 +15,15 @@ PRODUCTION_DOTENV_FILE_PATHS = [
     os.path.join(PRODUCTION_DOTENVS_DIR_PATH, ".postgres"),
 ]
 DOTENV_FILE_PATH = os.path.join(ROOT_DIR_PATH, ".env")
+=======
+ROOT_DIR_PATH = Path(__file__).parent.resolve()
+PRODUCTION_DOTENVS_DIR_PATH = ROOT_DIR_PATH / ".envs" / ".production"
+PRODUCTION_DOTENV_FILE_PATHS = [
+    PRODUCTION_DOTENVS_DIR_PATH / ".django",
+    PRODUCTION_DOTENVS_DIR_PATH / ".postgres",
+]
+DOTENV_FILE_PATH = ROOT_DIR_PATH / ".env"
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 
 def merge(
@@ -31,9 +45,15 @@ def main():
 @pytest.mark.parametrize("merged_file_count", range(3))
 @pytest.mark.parametrize("append_linesep", [True, False])
 def test_merge(tmpdir_factory, merged_file_count: int, append_linesep: bool):
+<<<<<<< HEAD
     tmp_dir_path = str(tmpdir_factory.getbasetemp())
 
     output_file_path = os.path.join(tmp_dir_path, ".env")
+=======
+    tmp_dir_path = Path(str(tmpdir_factory.getbasetemp()))
+
+    output_file_path = tmp_dir_path / ".env"
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
     expected_output_file_content = ""
     merged_file_paths = []
@@ -41,7 +61,11 @@ def test_merge(tmpdir_factory, merged_file_count: int, append_linesep: bool):
         merged_file_ord = i + 1
 
         merged_filename = ".service{}".format(merged_file_ord)
+<<<<<<< HEAD
         merged_file_path = os.path.join(tmp_dir_path, merged_filename)
+=======
+        merged_file_path = tmp_dir_path / merged_filename
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
         merged_file_content = merged_filename * merged_file_ord
 

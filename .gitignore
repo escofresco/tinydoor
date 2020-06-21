@@ -7,10 +7,13 @@ __pycache__/
 # C extensions
 *.so
 
+<<<<<<< HEAD
 # Editor and OS stuff
 .vscode 
 .DS_Store
 
+=======
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 # Distribution / packaging
 .Python
 build/
@@ -284,6 +287,7 @@ pip-selfcheck.json
 
 ### Project template
 
+MailHog
 tinydoor/media/
 
 .pytest_cache/
@@ -293,4 +297,5 @@ tinydoor/media/
 .envs/*
 !.envs/.local/
 
+package-lock.json
 dump.rdb

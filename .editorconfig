@@ -13,8 +13,13 @@ indent_style = space
 indent_size = 4
 
 [*.py]
+<<<<<<< HEAD
 line_length = 120
 known_first_party = tinydoor
+=======
+line_length = 88
+known_first_party = tinydoor,config
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 multi_line_output = 3
 default_section = THIRDPARTY
 recursive = true

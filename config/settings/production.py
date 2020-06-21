@@ -1,7 +1,10 @@
 import logging
 
 import sentry_sdk
+<<<<<<< HEAD
 
+=======
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -32,7 +35,11 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             # Mimicing memcache behavior.
+<<<<<<< HEAD
             # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+=======
+            # http://jazzband.github.io/django-redis/latest/#_memcached_exceptions_behavior
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
             "IGNORE_EXCEPTIONS": True,
         },
     }
@@ -87,11 +94,16 @@ AWS_DEFAULT_ACL = None
 AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
 # STATIC
 # ------------------------
+<<<<<<< HEAD
 STATICFILES_STORAGE = "config.settings.production.StaticRootS3Boto3Storage"
+=======
+STATICFILES_STORAGE = "tinydoor.utils.storages.StaticRootS3Boto3Storage"
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
 # MEDIA
 # ------------------------------------------------------------------------------
+<<<<<<< HEAD
 # region http://stackoverflow.com/questions/10390244/
 # Full-fledge class: https://stackoverflow.com/a/18046120/104731
 from storages.backends.s3boto3 import S3Boto3Storage  # noqa E402
@@ -109,6 +121,9 @@ class MediaRootS3Boto3Storage(S3Boto3Storage):
 
 # endregion
 DEFAULT_FILE_STORAGE = "config.settings.production.MediaRootS3Boto3Storage"
+=======
+DEFAULT_FILE_STORAGE = "tinydoor.utils.storages.MediaRootS3Boto3Storage"
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"
 
 # TEMPLATES
@@ -142,12 +157,23 @@ EMAIL_SUBJECT_PREFIX = env(
 # Django Admin URL regex.
 ADMIN_URL = env("DJANGO_ADMIN_URL")
 
+<<<<<<< HEAD
 # Anymail (Mailgun)
 # ------------------------------------------------------------------------------
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
 INSTALLED_APPS += ["anymail"]  # noqa F405
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
+=======
+# Anymail
+# ------------------------------------------------------------------------------
+# https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
+INSTALLED_APPS += ["anymail"]  # noqa F405
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
+# https://anymail.readthedocs.io/en/stable/esps/mailgun/
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 ANYMAIL = {
     "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
     "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
@@ -162,6 +188,17 @@ COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
 COMPRESS_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 # https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
 COMPRESS_URL = STATIC_URL
+<<<<<<< HEAD
+=======
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
+COMPRESS_FILTERS = {
+    "css": [
+        "compressor.filters.css_default.CssAbsoluteFilter",
+        "compressor.filters.cssmin.rCSSMinFilter",
+    ],
+    "js": ["compressor.filters.jsmin.JSMinFilter"],
+}
+>>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 # Collectfast
 # ------------------------------------------------------------------------------
 # https://github.com/antonagestam/collectfast#installation
