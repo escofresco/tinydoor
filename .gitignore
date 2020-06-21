@@ -7,13 +7,9 @@ __pycache__/
 # C extensions
 *.so
 
-<<<<<<< HEAD
-# Editor and OS stuff
+# Editor
 .vscode 
-.DS_Store
 
-=======
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 # Distribution / packaging
 .Python
 build/
