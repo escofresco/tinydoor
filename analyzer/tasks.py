@@ -7,7 +7,7 @@ from .helpers import *
 
 @shared_task
 def start_watching(file_url):
-    '''Transcribes a file by its location in S3 and then applies AWS Comprehend
+    """Transcribes a file by its location in S3 and then applies AWS Comprehend
     actions to the transcript.
     Args:
         filename: The full url to an audio file in S3.
@@ -17,7 +17,7 @@ def start_watching(file_url):
             'language': str,
             'sentiment': str,
         }
-    '''
+    """
     transcribe_res = transcribe(file_url)
     job = transcribe_res["TranscriptionJob"]
 
@@ -28,7 +28,4 @@ def start_watching(file_url):
     content = transcript_res["results"]["transcripts"][0]["transcript"]
 
     comprehend_res = comprehend(content)
-    return {
-        'text_content': content,
-        **comprehend_res
-        }
+    return {"text_content": content, **comprehend_res}
