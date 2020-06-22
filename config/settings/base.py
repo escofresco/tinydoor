@@ -41,9 +41,7 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///tinydoor")
-}
+DATABASES = {"default": env.db("DATABASE_URL", default="postgres:///tinydoor")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # URLS
@@ -226,7 +224,9 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Ashab Siddiqui, Jonasz Rice, Uyen Nguyen, Zain Raza""", "jonaszakr@gmail.com")]
+ADMINS = [
+    ("""Ashab Siddiqui, Jonasz Rice, Uyen Nguyen, Zain Raza""", "jonaszakr@gmail.com")
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -260,9 +260,7 @@ if USE_TZ:
     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
     CELERY_TIMEZONE = TIME_ZONE
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-CELERY_BROKER_URL = env(
-    "REDIS_URL", default="redis://localhost:6379/0"
-)
+CELERY_BROKER_URL = env("REDIS_URL", default="redis://localhost:6379/0")
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
