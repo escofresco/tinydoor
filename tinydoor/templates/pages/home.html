@@ -12,7 +12,8 @@
         <h4>Let's Analyze What's Going On in Your Store!</h4>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p><!-- Store title field-->
+            {{ form.as_p }}
+            <p><!-- Store title field -->
                 <label for="id_store_title">Store Title:</label> 
                 <input type="text" name="store_title" maxlength="200" required id="id_store_title"> 
                 <span class="helptext">Name of this analysis.</span>

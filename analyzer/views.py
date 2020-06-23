@@ -29,9 +29,22 @@ class AnalysisCreate(CreateView):
     '''Submit a form to create new Analysis.'''
     model = Analysis
     form_class = AnalysisForm
-    template_name = "analyzer/create.html"
+    template_name = "pages/home.html"
+
+    def get(self, request):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class()
+        return render(request, context, self.template_name)
 
     def form_valid(self, form):
         '''Initializes image field (if there is one of new Analysis.'''
         form.instance.image = self.request.FILES.get('image')
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        if "file_url" in request.POST:
+            # start a worker task for processing file located at file_url
+            res = start_watching.apply_async(
+                (request.POST["file_url"],), time_limit=60 * 20, soft_time_limit=60 * 15
+            )
+            return JsonResponse({"task_id": res.id})
