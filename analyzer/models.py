@@ -4,6 +4,7 @@ import os
 
 
 class Analysis(models.Model):
+    '''A model representing the media files which the store owner analyzes.'''
     store_title = models.CharField(max_length=200, help_text="Name of this analysis.",
                              unique=True)
     image = models.ImageField(upload_to='tinydoor-client-uploads',
