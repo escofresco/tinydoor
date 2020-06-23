@@ -25,7 +25,7 @@ class HomeView(TemplateView):
             return JsonResponse({"task_id": res.id})
 
 
-class AnalysissCreate(CreateView):
+class AnalysisCreate(CreateView):
     '''Submit a form to create new Analysis.'''
     model = Analysis
     form_class = AnalysisForm

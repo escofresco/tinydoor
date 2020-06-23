@@ -1,11 +1,14 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import HomeView, ListenedView
+from .views import (
+    HomeView,
+    ListenedView,
+    AnalysisCreate
 
 urlpatterns = [
     # home page
-    path("", HomeView.as_view(), name="home"),
+    path("", AnalysisCreate.as_view(), name="home"),
     path("<str:task_id>/", ListenedView.as_view(), name="listened-view"),
     # about page
     path(
