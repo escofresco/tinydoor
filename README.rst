@@ -86,7 +86,6 @@ Please note: For Celery's import magic to work, it is important *where* the cele
 
 
 
-<<<<<<< HEAD
 =======
 Email Server
 ^^^^^^^^^^^^
@@ -116,7 +115,6 @@ Now you have your own mail server running locally, ready to receive whatever you
 .. _mailhog: https://github.com/mailhog/MailHog
 
 
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 Sentry
 ^^^^^^
@@ -152,13 +150,9 @@ Bootstrap v4 is installed using npm and customised by tweaking your variables in
 You can find a list of available variables `in the bootstrap source`_, or get explanations on them in the `Bootstrap docs`_.
 
 
-<<<<<<< HEAD
 =======
 Bootstrap's javascript as well as its dependencies is concatenated into a single file: ``static/js/vendors.js``.
 
->>>>>>> dd4fd56341cdf9156f4b0a7016225b2ebdc82048
 
 .. _in the bootstrap source: https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss
 .. _Bootstrap docs: https://getbootstrap.com/docs/4.1/getting-started/theming/
-
-
