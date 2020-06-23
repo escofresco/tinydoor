@@ -9,7 +9,7 @@ import time
 
 class VideoDetect:
     jobId = ""
-    rek = boto3.client("rekognition")
+    rek = boto3.client("rekognition", region_name="us-west-1")
     sqs = boto3.client("sqs")
     sns = boto3.client("sns")
 
