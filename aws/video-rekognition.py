@@ -3,7 +3,6 @@ import boto3
 import json
 import sys
 import os
-from dotenv import load_dotenv
 
 """
 with open("credentials.csv", "r") as input:
@@ -182,7 +181,6 @@ print(get_faces_results(jobId))
 """
 if __name__ == "__main__":
     # user credentials
-    load_dotenv()
     access_key_id = str(os.getenv('AWS_ACCESS_KEY_ID'))
     secret_accees_key = str(os.getenv('AWS_SECRET_ACCESS_KEY'))
     # S3 details

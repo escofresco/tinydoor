@@ -20,7 +20,7 @@ class Analysis(models.Model):
         return reverse('', kwargs=path_components)
 
     def save(self, *args, **kwargs):
-        '''Makes a URL safe slug automatically when a new instance is saved.'''
+        '''Makes a new instance and saves it.'''
         # call save on the superclass
         return super(Analysis, self).save(*args, **kwargs)
 

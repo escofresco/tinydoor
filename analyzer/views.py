@@ -29,9 +29,9 @@ class AnalysisCreate(CreateView):
     '''Submit a form to create new Analysis.'''
     model = Analysis
     form_class = AnalysisForm
-    template_name = "pages/home.html"
+    template_name = "analyzer/create.html"
 
     def form_valid(self, form):
-        '''Initializes image field (if there is one) of new Analysis.'''
+        '''Initializes image field (if there is one of new Analysis.'''
         form.instance.image = self.request.FILES.get('image')
         return super().form_valid(form)

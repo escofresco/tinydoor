@@ -6,7 +6,32 @@
 {% endblock css %}
 
     {% block content %}
+        <!-- AnalysisCreate form -->
+        <h2>Upload an Image</h2>
+
+        <h4>Let's Analyze What's Going On in Your Store!</h4>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p><!-- Store title field-->
+                <label for="id_store_title">Store Title:</label> 
+                <input type="text" name="store_title" maxlength="200" required id="id_store_title"> 
+                <span class="helptext">Name of this analysis.</span>
+            </p>
+            <p> <!-- Image field -->
+                <label for="id_image">Image:</label> 
+                <input type="file" name="image" accept="image/*" id="id_image"> 
+                <span class="helptext">Image being analyzed.</span>
+            </p>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <input class="btn btn-success" type="submit" value="Confirm">
+                </div>
+            </div>
+        </form>
+        <!-- Uppu Upload Button 
         <button id="browse">Select Files</button>
+        -->
     {% endblock content %}
     {% block javascript %}
     {{ block.super }}
