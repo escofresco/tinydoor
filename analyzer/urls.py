@@ -6,6 +6,7 @@ from .views import (
     AnalysisCreate
 )
 
+app_name = 'analyzer'
 urlpatterns = [
     # home page
     path("", AnalysisCreate.as_view(), name="home"),
