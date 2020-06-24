@@ -1,3 +1,15 @@
 from django.test import TestCase
+from django.test.client import RequestFactory
+from django.urls import reverse, reverse_lazy
+from .views import (
+    HomeView,
+    WatchedView,
+)
 
-# Create your tests here.
+
+class HomeViewTests(TestCase):
+    pass
+
+
+class WatchedViewTests(TestCase):
+    pass
