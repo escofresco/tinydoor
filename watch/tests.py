@@ -13,9 +13,7 @@ class HomeViewTests(TestCase):
         Initializes objects and variables
         needed for every test in this class.
         """
-        # models that are needed for the 
-        # test to work, are instantiated here
-        pass
+        self.factory = RequestFactory()
 
     def test_true_is_true(self):
         '''Canary test to make sure environment is working correctly.'''
@@ -26,8 +24,8 @@ class HomeViewTests(TestCase):
         User is able to access the home page and 
         get a HTTP 200 response
         """
-        request = self.factory.get('trips:all-trips')
-        response = .views.HomeView.as_view()(request)
+        request = self.factory.get('home')
+        response = HomeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_upload_file(self):
