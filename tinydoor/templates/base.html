@@ -16,14 +16,14 @@
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
     {% block css %}
-    
+
 
     <!-- Your stuff: Third-party CSS libraries go here -->
     {% compress css %}
     <!-- This file stores project-specific CSS -->
-    
+
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+
     {% endcompress %}
     {% endblock %}
 
@@ -90,19 +90,19 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     {% block javascript %}
-      
+
+
       <!-- Vendor dependencies bundled as one file-->
       {% compress js %}
       <script src="{% static 'js/vendors.js' %}"></script>
       {% endcompress %}
-      
 
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      
       <!-- place project specific Javascript in this file -->
       {% compress js %}
       <script src="{% static 'js/project.js' %}"></script>
       {% endcompress %}
-
     {% endblock javascript %}
   </body>
 </html>
- 

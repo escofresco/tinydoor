@@ -1,100 +1,60 @@
 {% extends "base.html" %}
 
 {% block css %}
-    {{ block.super }}
-    <link href="https://transloadit.edgly.net/releases/uppy/v1.16.1/uppy.min.css" rel="stylesheet">
+<!-- Basic Uppy styles -->
+<link href="https://transloadit.edgly.net/releases/uppy/v1.16.1/uppy.min.css" rel="stylesheet">
+{{ block.super }}
+<link href="//transloadit.edgly.net/releases/uppy/robodog/v1.6.4/robodog.min.css" rel="stylesheet">
 {% endblock css %}
 
-    {% block content %}
-        <!-- AnalysisCreate form -->
-        <h2>Upload an Image</h2>
+{% block content %}
+<button id='browse'>Upload</button>
+{% endblock content %}
 
-        <h4>Let's Analyze What's Going On in Your Store!</h4>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <p><!-- Store title field -->
-                <label for="id_store_title">Store Title:</label> 
-                <input type="text" name="store_title" maxlength="200" required id="id_store_title"> 
-                <span class="helptext">Name of this analysis.</span>
-            </p>
-            <p> <!-- Image field -->
-                <label for="id_image">Image:</label> 
-                <input type="file" name="image" accept="image/*" id="id_image"> 
-                <span class="helptext">Image being analyzed.</span>
-            </p>
-            <br>
-            <div class="row">
-                <div class="col">
-                    <input class="btn btn-success" type="submit" value="Confirm">
-                </div>
-            </div>
-        </form>
-        <!-- Uppu Upload Button 
-        <button id="browse">Select Files</button>
-        -->
-    {% endblock content %}
-    {% block javascript %}
-    {{ block.super }}
-    <script src="https://transloadit.edgly.net/releases/uppy/v1.7.0/uppy.min.js"></script>
-    <script src="//transloadit.edgly.net/releases/uppy/robodog/v1.4.1/robodog.min.js"></script>
-    <script>
-    /* ajax for handling file uploads */
-    $("#emptyForm").submit(function (event) {
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/",
-            data: {
-                file_url: "asf",
-                csrfmiddlewaretoken: "{{ csrf_token }}",
-            },
-            success: function(data) {
-                window.location.href += data.task_id;
-            }
-        });
+{% block javascript %}
+{{ block.super }}
+<!-- This pulls Uppy from our CDN. Alternatively use `npm i @uppy/robodog --save` -->
+<!-- if you want smaller self-hosted bundles and/or to use modern JavaScript -->
+<script src="//transloadit.edgly.net/releases/uppy/robodog/v1.6.4/robodog.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://transloadit.edgly.net/releases/uppy/v1.16.1/uppy.min.js"></script>
+<script>
+
+document.getElementById('browse').addEventListener('click', function () {
+  // var uppy = window.Robodog.pick({
+  //   providers: [ 'instagram', 'url', 'webcam', 'dropbox', 'google-drive', 'facebook', 'onedrive' ],
+  //   waitForEncoding: true,
+  //   params: {
+  //     // To avoid tampering, use Signature Authentication
+  //     auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
+  //     template_id: '85def6ad6f4b437182fb715cdd45977f'
+  //   }
+  // }).then(function (bundle) {
+  //   // Due to `waitForEncoding: true` this is fired after encoding is done.
+  //   // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
+  //   // for Async Mode where your back-end receives the encoding results
+  //   // so that your user can be on their way as soon as the upload completes.
+  //   console.log(bundle.transloadit) // Array of Assembly Statuses
+  //   console.log(bundle.results)     // Array of all encoding results
+  //
+  //   startWatching(bundle.results[0].ssl_url);
+  // }).catch(console.error)
+  startWatching('afdsf')
+})
+
+function startWatching(furl) {
+    $.ajax({
+        type: "POST",
+        url: "/",
+        data: {
+            file_url: furl,
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+        },
+        success: function(data) {
+            // Once the task is started, redirect to results page
+            window.location.href += data.task_id;
+        }
     });
-
-    function startWatching(furl) {
-        $.ajax({
-            type: "POST",
-            url: "/",
-            data: {
-                file_url: furl,
-                csrfmiddlewaretoken: "{{ csrf_token }}",
-            },
-            success: function(data) {
-                // Once the task is started, redirect to results page
-                window.location.href += data.task_id;
-            }
-        });
-    }
-
-    /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    TRANSLOADIT
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-    document.getElementById("browse").addEventListener("click", function () {
-        var uppy = window.Robodog.pick({
-            providers: [ "instagram", "url", "webcam", "dropbox", "google-drive" ],
-            waitForEncoding: true,
-            params: {
-                // To avoid tampering, use Signature Authentication
-                auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
-                template_id: '85def6ad6f4b437182fb715cdd45977f'
-            }
-        }).then(function (bundle) {
-            // Due to `waitForEncoding: true` this is fired after encoding is done.
-            // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
-            // for Async Mode where your back-end receives the encoding results
-            // so that your user can be on their way as soon as the upload completes.
-            console.log(bundle.transloadit) // Array of Assembly Statuses
-            console.log(bundle.results)     // Array of all encoding results
-
-            // start. that. pipeliiiiinnneee!
-            startWatching(bundle.results[0].ssl_url);
-        }).catch(console.error)
-    })
-    </script>
-
-    {% endblock javascript %}
+}
+</script>
+{% endblock javascript %}

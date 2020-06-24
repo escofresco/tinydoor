@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p id="content-text">
+
+</p>
+{% endblock content %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+(function poll() {
+    $.ajax({
+        type: "POST",
+        url: "/{{ task_id }}/",
+        data: {
+            task_id: "{{ task_id }}",
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+        }, success: function(data) {
+            if (data.ready) {
+                console.log("ready");
+                console.log(data);
+                $("#content-text").text(data["people_count"]);
+            } else {
+                console.log(data);
+                console.log("not ready");
+                setTimeout(poll, 5000);
+            }
+        }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+            $("#results").text("Status " + textStatus + " Error: " + errorThrown);
+        }
+    });
+})();
+</script>
+{% endblock javascript %}
