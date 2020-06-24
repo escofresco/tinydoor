@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from django.urls import reverse, reverse_lazy
 from .views import (
@@ -10,9 +10,10 @@ from .views import (
 class HomeViewTests(TestCase):
     def setUp(self):
         """
-        Initializes objects and variables
-        needed for every test in this class.
+        Initializes objects and variables which may
+        be needed for multiple tests in this class.
         """
+        self.client = Client()
         self.factory = RequestFactory()
 
     def test_true_is_true(self):
@@ -42,4 +43,5 @@ class WatchedViewTests(TestCase):
         Initializes objects and variables
         needed for every test in this class.
         """
-        pass
+        self.client = Client()
+        self.factory = RequestFactory()
