@@ -86,7 +86,7 @@ Please note: For Celery's import magic to work, it is important *where* the cele
 
 
 
-=======
+
 Email Server
 ^^^^^^^^^^^^
 
@@ -150,7 +150,7 @@ Bootstrap v4 is installed using npm and customised by tweaking your variables in
 You can find a list of available variables `in the bootstrap source`_, or get explanations on them in the `Bootstrap docs`_.
 
 
-=======
+
 Bootstrap's javascript as well as its dependencies is concatenated into a single file: ``static/js/vendors.js``.
 
 
