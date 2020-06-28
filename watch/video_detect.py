@@ -9,7 +9,7 @@ import time
 
 class VideoDetect:
     jobId = ""
-    rek = boto3.client("rekognition")
+    rek = boto3.client("rekognition", region_name="us-west-1")
     sqs = boto3.client("sqs")
     sns = boto3.client("sns")
 
@@ -198,7 +198,7 @@ class VideoDetect:
 
 
 def main():
-    roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition-role"
+    roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition"
     bucket = "tinydoor-client-uploads"
     video = "02/f7f67761e143178c17e4967329a5d1/Untitled.mp4"
 
