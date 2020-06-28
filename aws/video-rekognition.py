@@ -26,7 +26,9 @@ class VideoDetect:
 
     def GetResultsFaces(self, jobId):
         """
+        Return an array of detected faces (Faces) sorted by the time the faces were detected.
         Get the results of face detection by calling get_face_detection().
+
         Expected output:
             Emotions: [
                 {'Type': 'HAPPY', 'Confidence': number},
