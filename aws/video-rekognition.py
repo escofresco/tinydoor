@@ -3,8 +3,6 @@ import boto3
 import json
 import sys
 import time
-from dotenv import load_dotenv
-load_dotenv()
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -27,7 +25,23 @@ class VideoDetect:
         self.video = video
 
     def GetResultsFaces(self, jobId):
-        """Get the results of face detection by calling get_face_detection()."""
+        """
+        Get the results of face detection by calling get_face_detection().
+        Expected output:
+            Emotions: [
+                {'Type': 'HAPPY', 'Confidence': number},
+                {'Type': 'FEAR', 'Confidence': number},
+                {'Type': 'SAD', 'Confidence': number},
+                {'Type': 'ANGRY', 'Confidence': number},
+                {'Type': 'CALM', 'Confidence': number},
+                {'Type':'SURPRISED', 'Confidence': number},
+                {'Type': 'DISGUSTED', 'Confidence': number},
+                {'Type': 'CONFUSED', 'Confidence': number}
+            ]
+            Smiling: {
+                'Value': boolean, 'Confidence': number
+            }
+        """
         maxResults = 30
         paginationToken = ''
         finished = False
@@ -37,15 +51,9 @@ class VideoDetect:
                                             MaxResults=maxResults,
                                             NextToken=paginationToken)
 
-            print(response['VideoMetadata']['Codec'])
-            print(str(response['VideoMetadata']['DurationMillis']))
-            print(response['VideoMetadata']['Format'])
-            print(response['VideoMetadata']['FrameRate'])
-
             for faceDetection in response['Faces']:
-                print('Face: ' + str(faceDetection['Face']))
-                print('Confidence: ' + str(faceDetection['Face']['Confidence']))
-                print('Timestamp: ' + str(faceDetection['Timestamp']))
+                print('Emotions: ' + str(faceDetection['Face']['Emotions']))
+                print('Smiling: ' + str(faceDetection['Face']['Smile']))
                 print()
 
             if 'NextToken' in response:
@@ -133,7 +141,7 @@ class VideoDetect:
     def DeleteTopicandQueue(self):
         """Deletes a topic and all its subscriptions."""
         self.sqs.delete_queue(QueueUrl=self.queueUrl)
-        self.sns.delete_topic(TopicArn=self.snsTopicName)
+        self.sns.delete_topic(TopicArn=self.snsTopicArn)
 
     def main(self):
         """
@@ -142,7 +150,7 @@ class VideoDetect:
         """
         jobFound = False
         response = self.rek.start_face_detection(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
-           NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn})
+           NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn},FaceAttributes='ALL')
 
         # response = self.rek.start_person_tracking(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
         # NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn})
@@ -188,7 +196,7 @@ class VideoDetect:
 if __name__ == "__main__":
     roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition"
     bucket = "tinydoor-client-uploads"
-    video = "Screen-Recording-2020-06-21-at-3.21.48-PM.flv"
+    video = "emotion-test/Screen Recording 2020-06-28 at 12.52.49 PM.mov"
 
     analyzer = VideoDetect(roleArn, bucket, video)
     analyzer.CreateTopicandQueue()
