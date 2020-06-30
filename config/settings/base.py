@@ -63,7 +63,6 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-    "analyzer.apps.AnalyzerConfig",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -306,5 +305,9 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
-# Your stuff...
-# ------------------------------------------------------------------------------
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
+AWS_CLIENT_UPLOADS_BUCKET_NAME = env("DJANGO_AWS_CLIENT_UPLOADS_BUCKET_NAME")
+AWS_REKOGNITION_ROLE_ARN = env("DJANGO_AWS_REKOGNITION_ROLE_ARN")
