@@ -21,6 +21,10 @@ class VideoDetect:
             "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
             "region_name": settings.AWS_REKOGNITION_REGION_NAME
         }
+        session = boto3.Session(
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
         self.rek = boto3.client("rekognition", **kwargs)
         self.sqs = boto3.client("sqs", **kwargs)
         self.sns = boto3.client("sns", **kwargs)
@@ -87,7 +91,20 @@ class VideoDetect:
         return succeeded
 
     def StartLabelDetection(self):
+        print(self.video)
         response = self.rek.start_label_detection(
+            Video={"S3Object": {"Bucket": self.bucket, "Name": self.video}},
+            NotificationChannel={
+                "RoleArn": self.roleArn,
+                "SNSTopicArn": self.snsTopicArn,
+            },
+        )
+
+        self.startJobId = response["JobId"]
+        print("Start Job Id: " + self.startJobId)
+
+    def StartFaceDetection(self):
+        response = self.rek.start_face_detection(
             Video={"S3Object": {"Bucket": self.bucket, "Name": self.video}},
             NotificationChannel={
                 "RoleArn": self.roleArn,
@@ -142,6 +159,26 @@ class VideoDetect:
                     paginationToken = response["NextToken"]
                 else:
                     finished = True
+
+    def GetFaceDetectionResults(self):
+        maxResults = 10
+        paginationToken = ""
+        finished = False
+        results = []
+
+        while finished == False:
+            response = self.rek.get_face_detection(
+                JobId=self.startJobId,
+                MaxResults=maxResults,
+                NextToken=paginationToken
+            )
+            results.append(response)
+
+            if "NextToken" in response:
+                paginationToken = response["NextToken"]
+            else:
+                finished = True
+        return results
 
     def CreateTopicandQueue(self):
 
