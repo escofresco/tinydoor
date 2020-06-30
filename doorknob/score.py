@@ -3,7 +3,18 @@ from decimal import Decimal
 __all__ = ("score", )
 
 def score(ratings, weights, scale=100, M=100, P=.5):
-    ## adapted from https://tinyurl.com/y88kvfth
+    """
+    A weighted scoring algorithm. Adapted from https://tinyurl.com/y88kvfth.
+
+    Args:
+        ratings: Array of valence scores which can either be -1, 0, or 1.
+        weights: Array of corresponding weights for each score ∈ [0, 1].
+        M: A number representing a moderate value.
+        P:  ∈ [0, 1]
+
+    Returns:
+        A score ∈ [0, 1]
+    """
     assert len(ratings) == len(weights)
 
     # Number of ratings or weights
