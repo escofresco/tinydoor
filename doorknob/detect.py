@@ -153,6 +153,7 @@ class VideoDetect:
 
         topicResponse = self.sns.create_topic(Name=snsTopicName)
         self.snsTopicArn = topicResponse["TopicArn"]
+        print(self.snsTopicArn)
 
         # create SQS queue
         sqsQueueName = "AmazonRekognitionQueue" + millis
