@@ -9,9 +9,9 @@ import time
 
 class VideoDetect:
     jobId = ""
-    rek = boto3.client("rekognition")
-    sqs = boto3.client("sqs")
-    sns = boto3.client("sns")
+    rek = boto3.client("rekognition", region_name='us-west-1')
+    sqs = boto3.client("sqs", region_name='us-west-1')
+    sns = boto3.client("sns", region_name='us-west-1')
 
     roleArn = ""
     bucket = ""
