@@ -17,9 +17,9 @@ class VideoDetect:
         self.roleArn = settings.AWS_REKOGNITION_ROLE_ARN
         self.bucket = settings.AWS_CLIENT_UPLOADS_BUCKET_NAME
         kwargs = {
-            aws_access_key_id: settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key: settings.AWS_SECRET_ACCESS_KEY,
-            region_name: settings.AWS_STORAGE_BUCKET_NAME
+            "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
+            "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
+            "region_name": settings.AWS_STORAGE_BUCKET_NAME
         }
         self.rek = boto3.client("rekognition", **kwargs)
         self.sqs = boto3.client("sqs", **kwargs)
