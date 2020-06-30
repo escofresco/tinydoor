@@ -31,18 +31,8 @@ class VideoDetect:
 
         Expected output:
             Emotions: [
-                {'Type': 'HAPPY', 'Confidence': number},
-                {'Type': 'FEAR', 'Confidence': number},
-                {'Type': 'SAD', 'Confidence': number},
-                {'Type': 'ANGRY', 'Confidence': number},
-                {'Type': 'CALM', 'Confidence': number},
-                {'Type':'SURPRISED', 'Confidence': number},
-                {'Type': 'DISGUSTED', 'Confidence': number},
-                {'Type': 'CONFUSED', 'Confidence': number}
+                {'Type': string, 'Confidence': number},
             ]
-            Smiling: {
-                'Value': boolean, 'Confidence': number
-            }
         """
         maxResults = 30
         paginationToken = ''
@@ -54,9 +44,14 @@ class VideoDetect:
                                             NextToken=paginationToken)
 
             for faceDetection in response['Faces']:
-                print('Emotions: ' + str(faceDetection['Face']['Emotions']))
-                print('Smiling: ' + str(faceDetection['Face']['Smile']))
+                max = faceDetection['Face']['Emotions'][0]
+                for emotion in faceDetection['Face']['Emotions']:
+                    if emotion['Confidence'] > max['Confidence']:
+                        max = emotion
+                print(max)
                 print()
+
+
 
             if 'NextToken' in response:
                 paginationToken = response['NextToken']
