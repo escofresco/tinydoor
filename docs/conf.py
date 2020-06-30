@@ -22,8 +22,8 @@ import sys
 # -- Project information -----------------------------------------------------
 
 project = "tinydoor"
-copyright = """2020, Jonasz Rice"""
-author = "Jonasz Rice"
+copyright = """2020, Ashab Siddiqui, Jonasz Rice, Uyen Nguyen, Zain Raza"""
+author = "Ashab Siddiqui, Jonasz Rice, Uyen Nguyen, Zain Raza"
 
 
 # -- General configuration ---------------------------------------------------

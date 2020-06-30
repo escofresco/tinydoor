@@ -1,20 +1,19 @@
 """
 Base settings to build other settings files upon.
 """
+from pathlib import Path
 
 import environ
 
-ROOT_DIR = (
-    environ.Path(__file__) - 3
-)  # (tinydoor/config/settings/base.py - 3 = tinydoor/)
-APPS_DIR = ROOT_DIR.path("tinydoor")
-
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+# tinydoor/
+APPS_DIR = ROOT_DIR / "tinydoor"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
-    env.read_env(str(ROOT_DIR.path(".env")))
+    env.read_env(str(ROOT_DIR / ".env"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -36,15 +35,13 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
-LOCALE_PATHS = [ROOT_DIR.path("locale")]
+LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///tinydoor")
-}
+DATABASES = {"default": env.db("DATABASE_URL", default="postgres:///tinydoor")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # URLS
@@ -66,14 +63,16 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
+    "analyzer.apps.AnalyzerConfig",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "rest_framework",
     "django_celery_beat",
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 LOCAL_APPS = [
@@ -140,11 +139,11 @@ MIDDLEWARE = [
 # STATIC
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR("staticfiles"))
+STATIC_ROOT = str(ROOT_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
+STATICFILES_DIRS = [str(APPS_DIR / "static")]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -154,7 +153,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(APPS_DIR("media"))
+MEDIA_ROOT = str(APPS_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -166,7 +165,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(APPS_DIR.path("templates"))],
+        "DIRS": [str(APPS_DIR / "templates")],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -199,7 +198,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
-FIXTURE_DIRS = (str(APPS_DIR.path("fixtures")),)
+FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 
 # SECURITY
 # ------------------------------------------------------------------------------
@@ -218,7 +217,7 @@ X_FRAME_OPTIONS = "DENY"
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
 )
-# https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
 # ADMIN
@@ -226,7 +225,9 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Jonasz Rice""", "jonaszakr@gmail.com")]
+ADMINS = [
+    ("""Ashab Siddiqui, Jonasz Rice, Uyen Nguyen, Zain Raza""", "jonaszakr@gmail.com")
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -260,9 +261,7 @@ if USE_TZ:
     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
     CELERY_TIMEZONE = TIME_ZONE
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-CELERY_BROKER_URL = env(
-    "REDIS_URL", default="redis://localhost:6379/0"
-)
+CELERY_BROKER_URL = env("REDIS_URL", default="redis://localhost:6379/0")
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
@@ -297,6 +296,15 @@ SOCIALACCOUNT_ADAPTER = "tinydoor.users.adapters.SocialAccountAdapter"
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
 INSTALLED_APPS += ["compressor"]
 STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
-
+# django-rest-framework
+# -------------------------------------------------------------------------------
+# django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
 # Your stuff...
 # ------------------------------------------------------------------------------
