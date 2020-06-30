@@ -7,7 +7,7 @@ def score(ratings, weights, scale=100, M=100, P=.5):
     A weighted scoring algorithm. Adapted from https://tinyurl.com/y88kvfth.
 
     Args:
-        ratings: Array of valence scores which can either be -1, 0, or 1.
+        ratings: Array of valence ratings which can either be -1, 0, or 1.
         weights: Array of corresponding weights for each score ∈ [0, 1].
         M: A number representing a moderate value.
         P:  ∈ [0, 1]
