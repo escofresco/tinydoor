@@ -19,7 +19,7 @@ class VideoDetect:
         kwargs = {
             "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
             "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
-            "region_name": settings.AWS_STORAGE_BUCKET_NAME
+            "region_name": settings.AWS_REKOGNITION_REGION_NAME
         }
         self.rek = boto3.client("rekognition", **kwargs)
         self.sqs = boto3.client("sqs", **kwargs)
