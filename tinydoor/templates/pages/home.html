@@ -21,25 +21,24 @@
 <script>
 
 document.getElementById('browse').addEventListener('click', function () {
-  // var uppy = window.Robodog.pick({
-  //   providers: [ 'instagram', 'url', 'webcam', 'dropbox', 'google-drive', 'facebook', 'onedrive' ],
-  //   waitForEncoding: true,
-  //   params: {
-  //     // To avoid tampering, use Signature Authentication
-  //     auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
-  //     template_id: '85def6ad6f4b437182fb715cdd45977f'
-  //   }
-  // }).then(function (bundle) {
-  //   // Due to `waitForEncoding: true` this is fired after encoding is done.
-  //   // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
-  //   // for Async Mode where your back-end receives the encoding results
-  //   // so that your user can be on their way as soon as the upload completes.
-  //   console.log(bundle.transloadit) // Array of Assembly Statuses
-  //   console.log(bundle.results)     // Array of all encoding results
-  //
-  //   startWatching(bundle.results[0].ssl_url);
-  // }).catch(console.error)
-  startWatching('afdsf')
+  var uppy = window.Robodog.pick({
+    providers: [ 'instagram', 'url', 'webcam', 'dropbox', 'google-drive', 'facebook', 'onedrive' ],
+    waitForEncoding: true,
+    params: {
+      // To avoid tampering, use Signature Authentication
+      auth: { key: '20ff383b0b2b49a79643d1874edf5a3f' },
+      template_id: '85def6ad6f4b437182fb715cdd45977f'
+    }
+  }).then(function (bundle) {
+    // Due to `waitForEncoding: true` this is fired after encoding is done.
+    // Alternatively, set `waitForEncoding` to `false` and provide a `notify_url`
+    // for Async Mode where your back-end receives the encoding results
+    // so that your user can be on their way as soon as the upload completes.
+    console.log(bundle.transloadit) // Array of Assembly Statuses
+    console.log(bundle.results)     // Array of all encoding results
+
+    startWatching(bundle.results[0].ssl_url);
+  }).catch(console.error)
 })
 
 function startWatching(furl) {
