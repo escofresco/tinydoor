@@ -1,31 +1,38 @@
-# Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# PDX-License-Identifier: MIT-0 (For details, see https://github.com/awsdocs/amazon-rekognition-developer-guide/blob/master/LICENSE-SAMPLECODE.)
-
+import os
 import boto3
 import json
 import sys
 import time
 
+from django.conf import settings
+
+
+__all__ = ("VideoDetect", )
 
 class VideoDetect:
-    jobId = ""
-    rek = boto3.client("rekognition", region_name="us-west-1")
-    sqs = boto3.client("sqs")
-    sns = boto3.client("sns")
+    """Analyze videos using Rekognition Video API."""
 
-    roleArn = ""
-    bucket = ""
-    video = ""
-    startJobId = ""
-
-    sqsQueueUrl = ""
-    snsTopicArn = ""
-    processType = ""
-
-    def __init__(self, role, bucket, video):
-        self.roleArn = role
-        self.bucket = bucket
+    def __init__(self, video):
         self.video = video
+        self.roleArn = settings.AWS_REKOGNITION_ROLE_ARN
+        self.bucket = settings.AWS_CLIENT_UPLOADS_BUCKET_NAME
+        kwargs = {
+            "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
+            "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
+            "region_name": settings.AWS_REKOGNITION_REGION_NAME
+        }
+        session = boto3.Session(
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
+        self.rek = boto3.client("rekognition", **kwargs)
+        self.sqs = boto3.client("sqs", **kwargs)
+        self.sns = boto3.client("sns", **kwargs)
+        self.startJobId = ""
+        self.queueUrl = ""
+        self.snsTopicArn = ""
+        self.processType = ""
+
 
     def GetSQSMessageSuccess(self):
 
@@ -84,7 +91,20 @@ class VideoDetect:
         return succeeded
 
     def StartLabelDetection(self):
+        print(self.video)
         response = self.rek.start_label_detection(
+            Video={"S3Object": {"Bucket": self.bucket, "Name": self.video}},
+            NotificationChannel={
+                "RoleArn": self.roleArn,
+                "SNSTopicArn": self.snsTopicArn,
+            },
+        )
+
+        self.startJobId = response["JobId"]
+        print("Start Job Id: " + self.startJobId)
+
+    def StartFaceDetection(self):
+        response = self.rek.start_face_detection(
             Video={"S3Object": {"Bucket": self.bucket, "Name": self.video}},
             NotificationChannel={
                 "RoleArn": self.roleArn,
@@ -140,6 +160,26 @@ class VideoDetect:
                 else:
                     finished = True
 
+    def GetFaceDetectionResults(self):
+        maxResults = 10
+        paginationToken = ""
+        finished = False
+        results = []
+
+        while finished == False:
+            response = self.rek.get_face_detection(
+                JobId=self.startJobId,
+                MaxResults=maxResults,
+                NextToken=paginationToken
+            )
+            results.append(response)
+
+            if "NextToken" in response:
+                paginationToken = response["NextToken"]
+            else:
+                finished = True
+        return results
+
     def CreateTopicandQueue(self):
 
         millis = str(int(round(time.time() * 1000)))
@@ -150,6 +190,7 @@ class VideoDetect:
 
         topicResponse = self.sns.create_topic(Name=snsTopicName)
         self.snsTopicArn = topicResponse["TopicArn"]
+        print(self.snsTopicArn)
 
         # create SQS queue
         sqsQueueName = "AmazonRekognitionQueue" + millis
@@ -195,22 +236,3 @@ class VideoDetect:
     def DeleteTopicandQueue(self):
         self.sqs.delete_queue(QueueUrl=self.sqsQueueUrl)
         self.sns.delete_topic(TopicArn=self.snsTopicArn)
-
-
-def main():
-    roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition"
-    bucket = "tinydoor-client-uploads"
-    video = "02/f7f67761e143178c17e4967329a5d1/Untitled.mp4"
-
-    analyzer = VideoDetect(roleArn, bucket, video)
-    analyzer.CreateTopicandQueue()
-
-    analyzer.StartLabelDetection()
-    if analyzer.GetSQSMessageSuccess() == True:
-        analyzer.GetLabelDetectionResults()
-
-    analyzer.DeleteTopicandQueue()
-
-
-if __name__ == "__main__":
-    main()

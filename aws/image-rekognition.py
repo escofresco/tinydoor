@@ -1,33 +1,18 @@
-import csv
-
+import os
 # Boto3 is the AWS SDK for Python, which allows us to write software that makes use of services like Amazon S3
 import boto3
-import os
-from config.settings.production import (
-    AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY,
-    AWS_STORAGE_BUCKET_NAME
-)
+from dotenv import load_dotenv
+load_dotenv()
 
-"""
-with open("credentials.csv", "r") as input:
-    next(input)
-    reader = csv.reader(input)
-    for line in reader:
-        access_key_id = line[2]
-        secret_accees_key = line[3]
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-key = "facial_expressions.jpeg"
-bucket = "testing-objects"
-"""
 
-def detect_faces(bucket, key, region="us-west-1", attributes=["ALL"]):
-    client = boto3.client(
-        "rekognition",
-        region_name=region,
-        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
-    )
+key = 'happy_girl.jpg'
+bucket = 'tinydoor-client-uploads'
+
+def detect_faces(bucket, key, region='us-west-1', attributes=['ALL']):
+    client = boto3.client('rekognition', region_name=region)
     #
     # # convert image to bytes
     # with open(key, 'rb') as source_image:

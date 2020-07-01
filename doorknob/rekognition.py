@@ -3,26 +3,30 @@ import boto3
 import json
 import sys
 import time
+from score import score
 
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-region_name = 'us-west-1'
+__all__ = ("VideoDetect", )
 
 class VideoDetect:
     """Analyze videos using Rekognition Video API."""
-
-    rek = boto3.client('rekognition', region_name)
-    sqs = boto3.client('sqs', region_name)
-    sns = boto3.client('sns', region_name)
+    kwargs = {
+        "aws_access_key_id": DJANGO_AWS_ACCESS_KEY_ID,
+        "aws_secret_access_key": DJANGO_AWS_SECRET_ACCESS_KEY,
+        "region_name": DJANGO_AWS_REKOGNITION_REGION_NAME
+    }
+    rek = boto3.client('rekognition', **kwargs)
+    sqs = boto3.client('sqs', **kwargs)
+    sns = boto3.client('sns', **kwargs)
     startJobId = ''
     queueUrl = ''
     snsTopicArn = ''
     processType = ''
 
-    def __init__(self, role, bucket, video):
-        self.roleArn = role
-        self.bucket = bucket
+    def __init__(self, video):
         self.video = video
+        self.roleArn = DJANGO_AWS_REKOGNITION_ROLE_ARN
+        self.bucket = DJANGO_AWS_CLIENT_UPLOADS_BUCKET_NAME
+        self.ratings = []
 
     def GetResultsFaces(self, jobId):
         """
@@ -48,10 +52,16 @@ class VideoDetect:
                 for emotion in faceDetection['Face']['Emotions']:
                     if emotion['Confidence'] > max['Confidence']:
                         max = emotion
+
+                if max['Type'] == 'HAPPY':
+                    self.ratings.append(1)
+                elif max['Type'] in set(['SURPRISED', 'CALM']):
+                    self.ratings.append(0)
+                else:
+                    self.ratings.append(-1)
+
                 print(max)
                 print()
-
-
 
             if 'NextToken' in response:
                 paginationToken = response['NextToken']
@@ -147,7 +157,7 @@ class VideoDetect:
         """
         jobFound = False
         response = self.rek.start_face_detection(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
-           NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn},FaceAttributes='ALL')
+           NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn}, FaceAttributes='ALL')
 
         # response = self.rek.start_person_tracking(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
         # NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn})
@@ -187,15 +197,16 @@ class VideoDetect:
                     self.sqs.delete_message(QueueUrl=self.queueUrl,
                                    ReceiptHandle=message['ReceiptHandle'])
 
+
         print('done')
 
 
 if __name__ == "__main__":
-    roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition"
-    bucket = "tinydoor-client-uploads"
+    # roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition"
+    # bucket = "tinydoor-client-uploads"
     video = "emotion-test/Screen Recording 2020-06-28 at 12.52.49 PM.mov"
 
-    analyzer = VideoDetect(roleArn, bucket, video)
+    analyzer = VideoDetect(video)
     analyzer.CreateTopicandQueue()
     analyzer.main()
     analyzer.DeleteTopicandQueue()
