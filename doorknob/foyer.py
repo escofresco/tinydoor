@@ -3,7 +3,6 @@ Manage the events detected through computer vision of a central space.
 """
 from collections import Counter
 from decimal import Decimal
-from functools import cached_property
 from math import sqrt
 
 __all__ = ("Scene", )
@@ -19,6 +18,7 @@ class Scene:
     """
     def __init__(self, aws_data=None):
         self.aws_data = aws_data
+        self.__valence = self.faces_as_valence_scores(self.aws_data)
 
     def faces_as_valence_scores(self, aws_data):
         """
@@ -67,9 +67,9 @@ class Scene:
             return (-1, most_likely_emotion[0])
         return (0, most_likely_emotion[0])
 
-    @cached_property
+    @property
     def valence(self):
-        return self.faces_as_valence_scores(self.aws_data)
+        return self.__valence
         #return self.score(*zip(*self.faces_as_valence_scores(self.aws_data)))
 
 
