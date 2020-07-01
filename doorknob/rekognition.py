@@ -7,12 +7,6 @@ from score import score
 
 __all__ = ("VideoDetect", )
 
-DJANGO_AWS_ACCESS_KEY_ID="AKIAZCPCW36LZKWISX6M"
-DJANGO_AWS_SECRET_ACCESS_KEY="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"
-DJANGO_AWS_REKOGNITION_REGION_NAME="us-west-1"
-DJANGO_AWS_CLIENT_UPLOADS_BUCKET_NAME="tinydoor-client-uploads"
-DJANGO_AWS_REKOGNITION_ROLE_ARN="arn:aws:iam::623782584215:role/tinydoor-rekognition"
-
 class VideoDetect:
     """Analyze videos using Rekognition Video API."""
     kwargs = {
