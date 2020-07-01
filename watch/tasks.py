@@ -3,9 +3,7 @@ from urllib.parse import urlparse
 from celery import shared_task
 
 from config.celery_app import app
-from doorknob import VideoDetect
-from doorknob.foyer import Scene
-
+from doorknob import VideoDetect, Scene
 
 @shared_task
 def start_watching(file_url):
@@ -16,7 +14,7 @@ def start_watching(file_url):
     analyzer.StartFaceDetection()
 
     if analyzer.GetSQSMessageSuccess() == True:
-        results = analyzer.GetFaceDetectionResults()  # .GetLabelDetectionResults()
+        results = analyzer.GetFaceDetectionResults()
     analyzer.DeleteTopicandQueue()
     scene = Scene(results)
     print(results)
