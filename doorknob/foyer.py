@@ -18,7 +18,8 @@ class Scene:
     """
     def __init__(self, aws_data=None):
         self.aws_data = aws_data
-        self.__valence = self.faces_as_valence_scores(self.aws_data)
+        self.__valence = self.score(*zip(
+            *self.faces_as_valence_scores(self.aws_data)))
 
     def faces_as_valence_scores(self, aws_data):
         """
@@ -32,8 +33,9 @@ class Scene:
         """
         for timestep in aws_data:
             for face in timestep.get("Faces", ()):
-                if "emotions" in face:
-                    yield self.emotions_valence(face["emotion"])
+                face = face.get("Face", ())
+                if "Emotions" in face:
+                    yield self.emotions_valence(face["Emotions"])
 
     def emotions_valence(self, emotions):
         """
