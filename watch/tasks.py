@@ -6,6 +6,7 @@ from config.celery_app import app
 from doorknob import VideoDetect
 from doorknob.foyer import Scene
 
+
 @shared_task
 def start_watching(file_url):
     file_path = urlparse(file_url).path
@@ -15,7 +16,7 @@ def start_watching(file_url):
     analyzer.StartFaceDetection()
 
     if analyzer.GetSQSMessageSuccess() == True:
-        results = analyzer.GetFaceDetectionResults()#.GetLabelDetectionResults()
+        results = analyzer.GetFaceDetectionResults()  # .GetLabelDetectionResults()
     analyzer.DeleteTopicandQueue()
     scene = Scene(results)
     print(results)

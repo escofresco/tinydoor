@@ -1,18 +1,21 @@
 import os
+
 # Boto3 is the AWS SDK for Python, which allows us to write software that makes use of services like Amazon S3
 import boto3
 from dotenv import load_dotenv
+
 load_dotenv()
 
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
 
-key = 'happy_girl.jpg'
-bucket = 'tinydoor-client-uploads'
+key = "happy_girl.jpg"
+bucket = "tinydoor-client-uploads"
 
-def detect_faces(bucket, key, region='us-west-1', attributes=['ALL']):
-    client = boto3.client('rekognition', region_name=region)
+
+def detect_faces(bucket, key, region="us-west-1", attributes=["ALL"]):
+    client = boto3.client("rekognition", region_name=region)
     #
     # # convert image to bytes
     # with open(key, 'rb') as source_image:
@@ -21,23 +24,23 @@ def detect_faces(bucket, key, region='us-west-1', attributes=['ALL']):
     # res = client.detect_faces(Image={'Bytes': source_bytes},
     #                           Attributes=attributes)
 
-    
     res = client.detect_faces(
         Image={"S3Object": {"Bucket": bucket, "Name": key}}, Attributes=attributes
     )
 
     return res["FaceDetails"]
 
+
 if __name__ == "__main__":
     # user credentials
     # load_dotenv()
-    access_key_id = AWS_ACCESS_KEY_ID,
-    secret_access_key = AWS_SECRET_ACCESS_KEY,
+    access_key_id = (AWS_ACCESS_KEY_ID,)
+    secret_access_key = (AWS_SECRET_ACCESS_KEY,)
     print(access_key_id, secret_access_key)
     # S3 details
     bucket = AWS_STORAGE_BUCKET_NAME
     print(bucket)
-    key = 'Screen Shot 2020-06-22 at 5.59.41 PM.png'
+    key = "Screen Shot 2020-06-22 at 5.59.41 PM.png"
     # do face detection
     for face_detail in detect_faces(bucket, key):
         print(

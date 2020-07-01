@@ -7,7 +7,8 @@ import time
 from django.conf import settings
 
 
-__all__ = ("VideoDetect", )
+__all__ = ("VideoDetect",)
+
 
 class VideoDetect:
     """Analyze videos using Rekognition Video API."""
@@ -19,11 +20,11 @@ class VideoDetect:
         kwargs = {
             "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
             "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
-            "region_name": settings.AWS_REKOGNITION_REGION_NAME
+            "region_name": settings.AWS_REKOGNITION_REGION_NAME,
         }
         session = boto3.Session(
-                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         )
         self.rek = boto3.client("rekognition", **kwargs)
         self.sqs = boto3.client("sqs", **kwargs)
@@ -32,7 +33,6 @@ class VideoDetect:
         self.queueUrl = ""
         self.snsTopicArn = ""
         self.processType = ""
-
 
     def GetSQSMessageSuccess(self):
 
@@ -110,7 +110,7 @@ class VideoDetect:
                 "RoleArn": self.roleArn,
                 "SNSTopicArn": self.snsTopicArn,
             },
-            FaceAttributes='ALL'
+            FaceAttributes="ALL",
         )
 
         self.startJobId = response["JobId"]
@@ -178,9 +178,7 @@ class VideoDetect:
 
         while finished == False:
             response = self.rek.get_face_detection(
-                JobId=self.startJobId,
-                MaxResults=maxResults,
-                NextToken=paginationToken
+                JobId=self.startJobId, MaxResults=maxResults, NextToken=paginationToken
             )
             results.append(response)
 

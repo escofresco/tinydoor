@@ -5,22 +5,24 @@ import sys
 import time
 from score import score
 
-__all__ = ("VideoDetect", )
+__all__ = ("VideoDetect",)
+
 
 class VideoDetect:
     """Analyze videos using Rekognition Video API."""
+
     kwargs = {
         "aws_access_key_id": DJANGO_AWS_ACCESS_KEY_ID,
         "aws_secret_access_key": DJANGO_AWS_SECRET_ACCESS_KEY,
-        "region_name": DJANGO_AWS_REKOGNITION_REGION_NAME
+        "region_name": DJANGO_AWS_REKOGNITION_REGION_NAME,
     }
-    rek = boto3.client('rekognition', **kwargs)
-    sqs = boto3.client('sqs', **kwargs)
-    sns = boto3.client('sns', **kwargs)
-    startJobId = ''
-    queueUrl = ''
-    snsTopicArn = ''
-    processType = ''
+    rek = boto3.client("rekognition", **kwargs)
+    sqs = boto3.client("sqs", **kwargs)
+    sns = boto3.client("sns", **kwargs)
+    startJobId = ""
+    queueUrl = ""
+    snsTopicArn = ""
+    processType = ""
 
     def __init__(self, video):
         self.video = video
@@ -39,23 +41,23 @@ class VideoDetect:
             ]
         """
         maxResults = 30
-        paginationToken = ''
+        paginationToken = ""
         finished = False
 
         while finished == False:
-            response = self.rek.get_face_detection(JobId=jobId,
-                                            MaxResults=maxResults,
-                                            NextToken=paginationToken)
+            response = self.rek.get_face_detection(
+                JobId=jobId, MaxResults=maxResults, NextToken=paginationToken
+            )
 
-            for faceDetection in response['Faces']:
-                max = faceDetection['Face']['Emotions'][0]
-                for emotion in faceDetection['Face']['Emotions']:
-                    if emotion['Confidence'] > max['Confidence']:
+            for faceDetection in response["Faces"]:
+                max = faceDetection["Face"]["Emotions"][0]
+                for emotion in faceDetection["Face"]["Emotions"]:
+                    if emotion["Confidence"] > max["Confidence"]:
                         max = emotion
 
-                if max['Type'] == 'HAPPY':
+                if max["Type"] == "HAPPY":
                     self.ratings.append(1)
-                elif max['Type'] in set(['SURPRISED', 'CALM']):
+                elif max["Type"] in set(["SURPRISED", "CALM"]):
                     self.ratings.append(0)
                 else:
                     self.ratings.append(-1)
@@ -63,34 +65,34 @@ class VideoDetect:
                 print(max)
                 print()
 
-            if 'NextToken' in response:
-                paginationToken = response['NextToken']
+            if "NextToken" in response:
+                paginationToken = response["NextToken"]
             else:
                 finished = True
 
     def GetResultsPersons(self, jobId):
         """Get person tracking information by calling get_person_tracking()."""
         maxResults = 30
-        paginationToken = ''
+        paginationToken = ""
         finished = False
 
         while finished is False:
-            response = self.rek.get_person_tracking(JobId=jobId,
-                                            MaxResults=maxResults,
-                                            NextToken=paginationToken)
+            response = self.rek.get_person_tracking(
+                JobId=jobId, MaxResults=maxResults, NextToken=paginationToken
+            )
 
-            print(response['VideoMetadata']['Codec'])
-            print(str(response['VideoMetadata']['DurationMillis']))
-            print(response['VideoMetadata']['Format'])
-            print(response['VideoMetadata']['FrameRate'])
+            print(response["VideoMetadata"]["Codec"])
+            print(str(response["VideoMetadata"]["DurationMillis"]))
+            print(response["VideoMetadata"]["Format"])
+            print(response["VideoMetadata"]["FrameRate"])
 
-            for personDetection in response['Persons']:
-                print('Index: ' + str(personDetection['Person']['Index']))
-                print('Timestamp: ' + str(personDetection['Timestamp']))
+            for personDetection in response["Persons"]:
+                print("Index: " + str(personDetection["Person"]["Index"]))
+                print("Timestamp: " + str(personDetection["Timestamp"]))
                 print()
 
-            if 'NextToken' in response:
-                paginationToken = response['NextToken']
+            if "NextToken" in response:
+                paginationToken = response["NextToken"]
             else:
                 finished = True
 
@@ -102,25 +104,25 @@ class VideoDetect:
         snsTopicName = "AmazonRekognition-TinyDoor" + millis
 
         topicResponse = self.sns.create_topic(Name=snsTopicName)
-        self.snsTopicArn = topicResponse['TopicArn']
+        self.snsTopicArn = topicResponse["TopicArn"]
 
-        #create SQS queue
+        # create SQS queue
         sqsQueueName = "AmazonRekognitionQueue" + millis
         self.sqs.create_queue(QueueName=sqsQueueName)
-        self.queueUrl = self.sqs.get_queue_url(QueueName=sqsQueueName)['QueueUrl']
+        self.queueUrl = self.sqs.get_queue_url(QueueName=sqsQueueName)["QueueUrl"]
 
-        attribs = self.sqs.get_queue_attributes(QueueUrl=self.queueUrl,
-                                                AttributeNames=['QueueArn'])['Attributes']
+        attribs = self.sqs.get_queue_attributes(
+            QueueUrl=self.queueUrl, AttributeNames=["QueueArn"]
+        )["Attributes"]
 
-        sqsQueueArn = attribs['QueueArn']
+        sqsQueueArn = attribs["QueueArn"]
 
         # Subscribe SQS queue to SNS topic
         self.sns.subscribe(
-            TopicArn=self.snsTopicArn,
-            Protocol='sqs',
-            Endpoint=sqsQueueArn)
+            TopicArn=self.snsTopicArn, Protocol="sqs", Endpoint=sqsQueueArn
+        )
 
-        #Authorize SNS to write SQS queue
+        # Authorize SNS to write SQS queue
         policy = """{{
           "Version":"2012-10-17",
           "Statement":[
@@ -137,13 +139,13 @@ class VideoDetect:
               }}
             }}
           ]
-        }}""".format(sqsQueueArn, self.snsTopicArn)
+        }}""".format(
+            sqsQueueArn, self.snsTopicArn
+        )
 
         response = self.sqs.set_queue_attributes(
-            QueueUrl = self.queueUrl,
-            Attributes = {
-                'Policy' : policy
-            })
+            QueueUrl=self.queueUrl, Attributes={"Policy": policy}
+        )
 
     def DeleteTopicandQueue(self):
         """Deletes a topic and all its subscriptions."""
@@ -156,49 +158,64 @@ class VideoDetect:
         Face detection is started by a call to start_face_detection.
         """
         jobFound = False
-        response = self.rek.start_face_detection(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
-           NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn}, FaceAttributes='ALL')
+        response = self.rek.start_face_detection(
+            Video={"S3Object": {"Bucket": self.bucket, "Name": self.video}},
+            NotificationChannel={
+                "RoleArn": self.roleArn,
+                "SNSTopicArn": self.snsTopicArn,
+            },
+            FaceAttributes="ALL",
+        )
 
         # response = self.rek.start_person_tracking(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
         # NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn})
 
-        print('Start Job Id: ' + response['JobId'])
+        print("Start Job Id: " + response["JobId"])
         dotLine = 0
         while jobFound is False:
-            sqsResponse = self.sqs.receive_message(QueueUrl=self.queueUrl, MessageAttributeNames=['ALL'],
-                                          MaxNumberOfMessages=10)
+            sqsResponse = self.sqs.receive_message(
+                QueueUrl=self.queueUrl,
+                MessageAttributeNames=["ALL"],
+                MaxNumberOfMessages=10,
+            )
 
             if sqsResponse:
-                if 'Messages' not in sqsResponse:
+                if "Messages" not in sqsResponse:
                     if dotLine < 20:
-                        print('.', end='')
-                        dotLine = dotLine+1
+                        print(".", end="")
+                        dotLine = dotLine + 1
                     else:
                         print()
                         dotLine = 0
                     sys.stdout.flush()
                     continue
 
-                for message in sqsResponse['Messages']:
-                    notification = json.loads(message['Body'])
-                    rekMessage = json.loads(notification['Message'])
-                    print(rekMessage['JobId'])
-                    print(rekMessage['Status'])
-                    if str(rekMessage['JobId']) == response['JobId']:
-                        print('Matching Job Found:' + rekMessage['JobId'])
+                for message in sqsResponse["Messages"]:
+                    notification = json.loads(message["Body"])
+                    rekMessage = json.loads(notification["Message"])
+                    print(rekMessage["JobId"])
+                    print(rekMessage["Status"])
+                    if str(rekMessage["JobId"]) == response["JobId"]:
+                        print("Matching Job Found:" + rekMessage["JobId"])
                         jobFound = True
-                        self.GetResultsFaces(rekMessage['JobId'])
-                        self.sqs.delete_message(QueueUrl=self.queueUrl,
-                                           ReceiptHandle=message['ReceiptHandle'])
+                        self.GetResultsFaces(rekMessage["JobId"])
+                        self.sqs.delete_message(
+                            QueueUrl=self.queueUrl,
+                            ReceiptHandle=message["ReceiptHandle"],
+                        )
                     else:
-                        print("Job didn't match:" +
-                              str(rekMessage['JobId']) + ' : ' + str(response['JobId']))
+                        print(
+                            "Job didn't match:"
+                            + str(rekMessage["JobId"])
+                            + " : "
+                            + str(response["JobId"])
+                        )
                     # Delete the unknown message. Consider sending to dead letter queue
-                    self.sqs.delete_message(QueueUrl=self.queueUrl,
-                                   ReceiptHandle=message['ReceiptHandle'])
+                    self.sqs.delete_message(
+                        QueueUrl=self.queueUrl, ReceiptHandle=message["ReceiptHandle"]
+                    )
 
-
-        print('done')
+        print("done")
 
 
 if __name__ == "__main__":
