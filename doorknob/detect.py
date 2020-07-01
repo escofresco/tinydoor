@@ -188,6 +188,33 @@ class VideoDetect:
                 finished = True
         return results
 
+
+    def GetResultsPersons(self, jobId):
+        """Get person tracking information by calling get_person_tracking()."""
+        maxResults = 30
+        paginationToken = ""
+        finished = False
+
+        while finished is False:
+            response = self.rek.get_person_tracking(
+                JobId=jobId, MaxResults=maxResults, NextToken=paginationToken
+            )
+
+            print(response["VideoMetadata"]["Codec"])
+            print(str(response["VideoMetadata"]["DurationMillis"]))
+            print(response["VideoMetadata"]["Format"])
+            print(response["VideoMetadata"]["FrameRate"])
+
+            for personDetection in response["Persons"]:
+                print("Index: " + str(personDetection["Person"]["Index"]))
+                print("Timestamp: " + str(personDetection["Timestamp"]))
+                print()
+
+            if "NextToken" in response:
+                paginationToken = response["NextToken"]
+            else:
+                finished = True
+
     def CreateTopicandQueue(self):
 
         millis = str(int(round(time.time() * 1000)))
