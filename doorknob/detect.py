@@ -110,6 +110,7 @@ class VideoDetect:
                 "RoleArn": self.roleArn,
                 "SNSTopicArn": self.snsTopicArn,
             },
+            FaceAttributes='ALL'
         )
 
         self.startJobId = response["JobId"]
@@ -161,6 +162,15 @@ class VideoDetect:
                     finished = True
 
     def GetFaceDetectionResults(self):
+        """
+        Return an array of detected faces (Faces) sorted by the time the faces were detected.
+        Get the results of face detection by calling get_face_detection().
+
+        Expected output:
+            Emotions: [
+                {'Type': string, 'Confidence': number},
+            ]
+        """
         maxResults = 10
         paginationToken = ""
         finished = False
@@ -186,7 +196,7 @@ class VideoDetect:
 
         # Create SNS topic
 
-        snsTopicName = "AmazonRekognitionExample" + millis
+        snsTopicName = "AmazonRekognitionTinyDoor" + millis
 
         topicResponse = self.sns.create_topic(Name=snsTopicName)
         self.snsTopicArn = topicResponse["TopicArn"]
