@@ -19,13 +19,13 @@ def prep_git_versioning():
     # by owner in case the above is called on existing file,
     # and read in case we want to ever see it.
     # equivalent to chmod +x; apply to .git/hooks/pre-push
-    ## adapted from https://stackoverflow.com/a/12792002/8011811
+    # adapted from https://stackoverflow.com/a/12792002/8011811
     os.chmod(".git/hooks/pre-commit", S_IWUSR | S_IEXEC | S_IRUSR)
 
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
-    #prep_git_versioning()  # Set up githook when this file is run
+    # prep_git_versioning()  # Set up githook when this file is run
 
     try:
         from django.core.management import execute_from_command_line
