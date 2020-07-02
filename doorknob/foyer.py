@@ -36,7 +36,7 @@ class Scene:
 
             if faces is None:
                 raise ValueError("aws data is missing Faces")
-            
+
             for face in faces:
                 face = face.get("Face")
 
