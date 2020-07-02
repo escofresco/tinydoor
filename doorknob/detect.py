@@ -1,13 +1,12 @@
-import os
-import boto3
 import json
 import sys
 import time
 
+import boto3
 from django.conf import settings
 
+__all__ = ("VideoDetect",)
 
-__all__ = ("VideoDetect", )
 
 class VideoDetect:
     """Analyze videos using Rekognition Video API."""
@@ -19,12 +18,8 @@ class VideoDetect:
         kwargs = {
             "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
             "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
-            "region_name": settings.AWS_REKOGNITION_REGION_NAME
+            "region_name": settings.AWS_REKOGNITION_REGION_NAME,
         }
-        session = boto3.Session(
-                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
         self.rek = boto3.client("rekognition", **kwargs)
         self.sqs = boto3.client("sqs", **kwargs)
         self.sns = boto3.client("sns", **kwargs)
@@ -33,14 +28,13 @@ class VideoDetect:
         self.snsTopicArn = ""
         self.processType = ""
 
-
     def GetSQSMessageSuccess(self):
 
         jobFound = False
         succeeded = False
 
         dotLine = 0
-        while jobFound == False:
+        while not jobFound:
             sqsResponse = self.sqs.receive_message(
                 QueueUrl=self.sqsQueueUrl,
                 MessageAttributeNames=["ALL"],
@@ -110,6 +104,7 @@ class VideoDetect:
                 "RoleArn": self.roleArn,
                 "SNSTopicArn": self.snsTopicArn,
             },
+            FaceAttributes="ALL",
         )
 
         self.startJobId = response["JobId"]
@@ -120,7 +115,7 @@ class VideoDetect:
         paginationToken = ""
         finished = False
 
-        while finished == False:
+        while not finished:
             response = self.rek.get_label_detection(
                 JobId=self.startJobId,
                 MaxResults=maxResults,
@@ -161,17 +156,25 @@ class VideoDetect:
                     finished = True
 
     def GetFaceDetectionResults(self):
+        """
+        Return an array of detected faces (Faces) sorted by the time the faces were detected.
+        Get the results of face detection by calling get_face_detection().
+
+        Expected output:
+            Emotions: [
+                {'Type': string, 'Confidence': number},
+            ]
+        """
         maxResults = 10
         paginationToken = ""
         finished = False
         results = []
 
-        while finished == False:
+        while not finished:
             response = self.rek.get_face_detection(
-                JobId=self.startJobId,
-                MaxResults=maxResults,
-                NextToken=paginationToken
+                JobId=self.startJobId, MaxResults=maxResults, NextToken=paginationToken
             )
+
             results.append(response)
 
             if "NextToken" in response:
@@ -180,13 +183,39 @@ class VideoDetect:
                 finished = True
         return results
 
+    def GetResultsPersons(self, jobId):
+        """Get person tracking information by calling get_person_tracking()."""
+        maxResults = 30
+        paginationToken = ""
+        finished = False
+
+        while finished is False:
+            response = self.rek.get_person_tracking(
+                JobId=jobId, MaxResults=maxResults, NextToken=paginationToken
+            )
+
+            print(response["VideoMetadata"]["Codec"])
+            print(str(response["VideoMetadata"]["DurationMillis"]))
+            print(response["VideoMetadata"]["Format"])
+            print(response["VideoMetadata"]["FrameRate"])
+
+            for personDetection in response["Persons"]:
+                print("Index: " + str(personDetection["Person"]["Index"]))
+                print("Timestamp: " + str(personDetection["Timestamp"]))
+                print()
+
+            if "NextToken" in response:
+                paginationToken = response["NextToken"]
+            else:
+                finished = True
+
     def CreateTopicandQueue(self):
 
         millis = str(int(round(time.time() * 1000)))
 
         # Create SNS topic
 
-        snsTopicName = "AmazonRekognitionExample" + millis
+        snsTopicName = "AmazonRekognitionTinyDoor" + millis
 
         topicResponse = self.sns.create_topic(Name=snsTopicName)
         self.snsTopicArn = topicResponse["TopicArn"]
@@ -228,8 +257,7 @@ class VideoDetect:
         }}""".format(
             sqsQueueArn, self.snsTopicArn
         )
-
-        response = self.sqs.set_queue_attributes(
+        _ = self.sqs.set_queue_attributes(
             QueueUrl=self.sqsQueueUrl, Attributes={"Policy": policy}
         )
 
