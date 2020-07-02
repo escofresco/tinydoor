@@ -27,7 +27,6 @@ class VideoDetect:
         self.queueUrl = ""
         self.snsTopicArn = ""
         self.processType = ""
-        self.progress = 0
 
     def GetSQSMessageSuccess(self):
 
@@ -176,9 +175,6 @@ class VideoDetect:
                 JobId=self.startJobId, MaxResults=maxResults, NextToken=paginationToken
             )
 
-            # Update progres based on last timestamp in response
-            self.progress = (response["Faces"][-1]["Timestamp"] /
-                             response["VideoMetadata"]["DurationMillis"])*100
             results.append(response)
 
             if "NextToken" in response:
