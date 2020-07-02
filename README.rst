@@ -11,7 +11,8 @@ Customer analytics for retailers
      :alt: Black code style
  .. image:: https://travis-ci.com/escofresco/tinydoor.svg?branch=master
      :target: https://travis-ci.com/escofresco/tinydoor
-
+ .. image:: https://codecov.io/gh/escofresco/tinydoor/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/escofresco/tinydoor
 
 :License: MIT
 
