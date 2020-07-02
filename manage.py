@@ -2,9 +2,30 @@
 import os
 import sys
 from pathlib import Path
+from stat import S_IEXEC, S_IRUSR, S_IWUSR
+
+
+def prep_git_versioning():
+    """Do some things to make this project fully ready for
+    development"""
+    # pre-commit to .git/hooks/, found by github, which then runs
+    # .githooks/pre-commit
+    # this is how pre-commit script is being kept in version control
+
+    with open(".git/hooks/pre-commit", "w") as hookscript:
+        hookscript.write("#!/bin/sh\n" "sh .githooks/pre-commit")
+
+    # change permissions to execute by owner so github can use it, write
+    # by owner in case the above is called on existing file,
+    # and read in case we want to ever see it.
+    # equivalent to chmod +x; apply to .git/hooks/pre-push
+    ## adapted from https://stackoverflow.com/a/12792002/8011811
+    os.chmod(".git/hooks/pre-commit", S_IWUSR | S_IEXEC | S_IRUSR)
+
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+    #prep_git_versioning()  # Set up githook when this file is run
 
     try:
         from django.core.management import execute_from_command_line
