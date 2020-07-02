@@ -1,5 +1,4 @@
 import json
-import os
 import unittest
 
 from doorknob.foyer import Scene

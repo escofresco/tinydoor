@@ -1,11 +1,9 @@
-import os
-import boto3
 import json
 import sys
 import time
 
+import boto3
 from django.conf import settings
-
 
 __all__ = ("VideoDetect",)
 
@@ -22,10 +20,6 @@ class VideoDetect:
             "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
             "region_name": settings.AWS_REKOGNITION_REGION_NAME,
         }
-        session = boto3.Session(
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
         self.rek = boto3.client("rekognition", **kwargs)
         self.sqs = boto3.client("sqs", **kwargs)
         self.sns = boto3.client("sns", **kwargs)
@@ -33,6 +27,7 @@ class VideoDetect:
         self.queueUrl = ""
         self.snsTopicArn = ""
         self.processType = ""
+        self.progress = 0
 
     def GetSQSMessageSuccess(self):
 
@@ -40,7 +35,7 @@ class VideoDetect:
         succeeded = False
 
         dotLine = 0
-        while jobFound == False:
+        while not jobFound:
             sqsResponse = self.sqs.receive_message(
                 QueueUrl=self.sqsQueueUrl,
                 MessageAttributeNames=["ALL"],
@@ -121,7 +116,7 @@ class VideoDetect:
         paginationToken = ""
         finished = False
 
-        while finished == False:
+        while not finished:
             response = self.rek.get_label_detection(
                 JobId=self.startJobId,
                 MaxResults=maxResults,
@@ -176,10 +171,14 @@ class VideoDetect:
         finished = False
         results = []
 
-        while finished == False:
+        while not finished:
             response = self.rek.get_face_detection(
                 JobId=self.startJobId, MaxResults=maxResults, NextToken=paginationToken
             )
+
+            # Update progres based on last timestamp in response
+            self.progress = (response["Faces"][-1]["Timestamp"] /
+                             response["VideoMetadata"]["DurationMillis"])*100
             results.append(response)
 
             if "NextToken" in response:
@@ -262,8 +261,7 @@ class VideoDetect:
         }}""".format(
             sqsQueueArn, self.snsTopicArn
         )
-
-        response = self.sqs.set_queue_attributes(
+        _ = self.sqs.set_queue_attributes(
             QueueUrl=self.sqsQueueUrl, Attributes={"Policy": policy}
         )
 
