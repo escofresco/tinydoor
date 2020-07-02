@@ -188,7 +188,6 @@ class VideoDetect:
                 finished = True
         return results
 
-
     def GetResultsPersons(self, jobId):
         """Get person tracking information by calling get_person_tracking()."""
         maxResults = 30

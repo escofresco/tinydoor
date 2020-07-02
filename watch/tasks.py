@@ -5,6 +5,7 @@ from celery import shared_task
 from config.celery_app import app
 from doorknob import VideoDetect, Scene
 
+
 @shared_task
 def start_watching(file_url):
     file_path = urlparse(file_url).path.strip("/")
