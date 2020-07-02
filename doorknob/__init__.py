@@ -1,4 +1,3 @@
 from .detect import *
 from .foyer import *
-
-__all__ = ("VideoDetect", "Scene")
+from .helpers import *
