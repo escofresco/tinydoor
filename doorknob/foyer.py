@@ -118,15 +118,15 @@ class Scene:
             + z * z / (2 * n)
             - z * Decimal(sqrt((p_hat * (1 - p_hat) + z * z / (4 * n)) / n))
         ) / (1 + z * z / n)
-
-        # Quantity importance
-        Q = -Decimal(M) / Decimal(1 / 2).ln()
-
-        # Weighted mean
-        p = sum(Decimal(r + 1) * Decimal(w) for r, w in zip(ratings, weights)) / n
-        # Normalized mean
-        # p = sum(Decimal(num)*Decimal(count) for num, count in hist.items()) / q
-
-        return Decimal(P) * Decimal(p) + Decimal(2) * (1 - Decimal(P)) * (
-            1 - Decimal(-n / Q).exp()
-        )
+        #
+        # # Quantity importance
+        # Q = -Decimal(M) / Decimal(1 / 2).ln()
+        #
+        # # Weighted mean
+        # p = sum(Decimal(r + 1) * Decimal(w) for r, w in zip(ratings, weights)) / n
+        # # Normalized mean
+        # # p = sum(Decimal(num)*Decimal(count) for num, count in hist.items()) / q
+        #
+        # return Decimal(P) * Decimal(p) + Decimal(2) * (1 - Decimal(P)) * (
+        #     1 - Decimal(-n / Q).exp()
+        # )
