@@ -32,10 +32,21 @@ class Scene:
             Valence of next face
         """
         for timestep in aws_data:
-            for face in timestep.get("Faces", ()):
-                face = face.get("Face", ())
+            faces = timestep.get("Faces")
+
+            if faces is None:
+                raise ValueError("aws data is missing Faces")
+            
+            for face in faces:
+                face = face.get("Face")
+
+                if face is None:
+                    raise ValueError("aws data is missing Face")
+
                 if "Emotions" in face:
                     yield self.emotions_valence(face["Emotions"])
+                else:
+                    raise ValueError("aws data is missing emotions")
 
     def emotions_valence(self, emotions):
         """
