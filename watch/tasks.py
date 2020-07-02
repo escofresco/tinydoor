@@ -7,7 +7,7 @@ from doorknob import VideoDetect, Scene
 
 @shared_task
 def start_watching(file_url):
-    file_path = urlparse(file_url).path
+    file_path = urlparse(file_url).path.strip("/")
     analyzer = VideoDetect(file_path)
     results = None
     analyzer.CreateTopicandQueue()
