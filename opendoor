@@ -1,0 +1,19 @@
+#!/bin/bash
+# Adapted from https://tinyurl.com/yawevzqt
+# Array of commands to run in different tabs
+commands=(
+    'redis-server'
+    "pg_ctl -D '/Users/$(who)/Library/Application Support/Postgres/''$(ls /Users/$(who)/Library/Application Support/Postgres' | head -1) start"
+    'celery -A config.celery_app worker -l info'
+    'uvicorn config.asgi:application --host 0.0.0.0 --reload'
+)
+
+# Build final command with all the tabs to launch
+set finalCommand=""
+for (( i = 0; i < ${#commands[@]}; i++ )); do
+    #export finalCommand+="--tab -e 'bash -c \"${commands[$i]}\"' "
+    export finalCommand+="osascript -e 'tell application \"Terminal\" to activate' -e 'tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down' -e 'tell application \"Terminal\" to do script \"${commands[$i]}\" in selected tab of the front window'"
+done
+echo "$finalCommand"
+# Run the final command
+eval "$finalCommand"
