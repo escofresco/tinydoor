@@ -5,6 +5,7 @@ from .views import (
     HomeView,
     WatchedView,
 )
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class HomeViewTests(TestCase):
@@ -19,10 +20,10 @@ class HomeViewTests(TestCase):
     def test_true_is_true(self):
         '''Canary test to make sure environment is working correctly.'''
         self.assertEqual(True, True)
-    
+
     def test_get_home_view(self):
         """
-        User is able to access the home page and 
+        User is able to access the home page and
         get a HTTP 200 response
         """
         request = self.factory.get('home')
@@ -45,3 +46,10 @@ class WatchedViewTests(TestCase):
         """
         self.client = Client()
         self.factory = RequestFactory()
+
+    # def test_form(self):
+    #     upload_file = open('path/to/file', 'rb')
+    #     post_dict = {'title': 'Test Title'}
+    #     file_dict = {'file': SimpleUploadedFile(upload_file.name, upload_file.read())}
+    #     form = MyForm(post_dict, file_dict)
+    #     self.assertTrue(form.is_valid())
