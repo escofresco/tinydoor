@@ -5,11 +5,7 @@ from django.test import RequestFactory
 
 from tinydoor.users.models import User
 from tinydoor.users.tests.factories import UserFactory
-from tinydoor.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from tinydoor.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 

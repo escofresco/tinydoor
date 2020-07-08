@@ -8,7 +8,7 @@ __pycache__/
 *.so
 
 # Editor
-.vscode 
+.vscode
 
 # Distribution / packaging
 .Python
@@ -295,3 +295,4 @@ tinydoor/media/
 
 package-lock.json
 dump.rdb
+.idea

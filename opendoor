@@ -1,0 +1,27 @@
+#!/bin/bash
+
+envName=$1
+
+# https://tinyurl.com/y7j32u6t
+loggedInUser=$( echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ && ! /loginwindow/ { print $3 }' )
+
+# Adapted from https://tinyurl.com/yawevzqt
+# Array of commands to run in different tabs
+commands=(
+
+    'redis-server'
+    'celery -A config.celery_app worker -l info'
+    'uvicorn config.asgi:application --host 0.0.0.0 --reload'
+)
+
+# Build final command with all the tabs to launch
+set finalCommand=""
+for (( i = 0; i < ${#commands[@]}; i++ )); do
+    #export finalCommand+="--tab -e 'bash -c \"${commands[$i]}\"' "
+    export finalCommand+="osascript -e 'tell application \"Terminal\" to activate' -e 'tell application \"System Events\" to tell process \"Terminal\" to keystroke \"t\" using command down' -e 'tell application \"Terminal\" to do script \"conda activate $envName;${commands[$i]}\" in selected tab of the front window'; "
+done
+echo "$finalCommand"
+# Run the final command
+eval "$finalCommand"
+
+eval "pg_ctl -D \"/Users/$loggedInUser/Library/Application Support/Postgres/\"$(ls /Users/$loggedInUser/Library/'Application Support'/Postgres | head -1) start"

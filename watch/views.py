@@ -1,6 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.views.generic.detail import DetailView
+from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from .forms import EmptyForm
