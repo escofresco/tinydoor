@@ -6,7 +6,10 @@ class Score(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.PROTECT,
                              help_text='User who posted the video being scored.')
-    video_link = models.CharField(null=True, blank=True, help_text=(
+    video_link = models.CharField(max_length=200,
+                                  null=True,
+                                  blank=True,
+                                  help_text=(
         'Link to the video being scored (can play it back later).'
     ))
     emotion_score = models.FloatField(help_text=(
