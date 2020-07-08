@@ -1,9 +1,7 @@
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
-from django.urls import reverse, reverse_lazy
 from .views import (
     HomeView,
-    WatchedView,
 )
 
 
@@ -19,10 +17,10 @@ class HomeViewTests(TestCase):
     def test_true_is_true(self):
         '''Canary test to make sure environment is working correctly.'''
         self.assertEqual(True, True)
-    
+
     def test_get_home_view(self):
         """
-        User is able to access the home page and 
+        User is able to access the home page and
         get a HTTP 200 response
         """
         request = self.factory.get('home')
@@ -34,7 +32,6 @@ class HomeViewTests(TestCase):
         User is able to upload a file to the view,
         and is redirected (receives a HTTP 302).
         """
-        pass
 
 
 class WatchedViewTests(TestCase):
