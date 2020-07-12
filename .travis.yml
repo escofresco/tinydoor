@@ -12,7 +12,7 @@ jobs:
       before_script:
         - pip install -q flake8
       script:
-        - flake8
+        - flake8 --exclude=doorknob/__init__.py,migrations
 
     - name: "Django Test"
       before_install:
