@@ -1,4 +1,5 @@
 from django.db import models
+
 from tinydoor.users.models import User
 
 
@@ -10,8 +11,8 @@ class Score(models.Model):
                                   null=True,
                                   blank=True,
                                   help_text=(
-        'Link to the video being scored (can play it back later).'
-    ))
+                                    'Link to the video ' +
+                                    'being scored (can play it back later).'))
     emotion_score = models.FloatField(help_text=(
         "Tinydoor score for gauging positive customer experience.")
     )

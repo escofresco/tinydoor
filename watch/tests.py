@@ -1,8 +1,6 @@
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.test.client import RequestFactory
-from .views import (
-    HomeView,
-)
+from watch.views import HomeView
 
 
 class HomeViewTests(TestCase):
