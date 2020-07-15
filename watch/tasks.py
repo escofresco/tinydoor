@@ -22,6 +22,7 @@ def start_watching(file_url):
                                  video_link=file_url,
                                  emotion_score=scene.valence)
     score.save()
+    print(f'Score being saved? {score}')
     print(results)
     return {
         "score": scene.valence,
