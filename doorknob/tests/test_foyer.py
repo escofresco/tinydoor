@@ -16,3 +16,9 @@ class SceneTestCase(unittest.TestCase):
         with open(filename) as f:
             with self.assertRaises(ValueError):
                 Scene(aws_data=json.load(f))
+
+
+class VideoDetectTestCase(unittest.TestCase):
+    """
+    Tests that the VideoDetect properties and functions work correctly.
+    """
