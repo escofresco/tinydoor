@@ -2,7 +2,6 @@ from urllib.parse import urlparse
 
 from celery import shared_task
 from doorknob import Scene, VideoDetect
-from watch.models import Score
 
 
 @shared_task
