@@ -33,6 +33,7 @@ class Scene:
         Yields:
             Valence of next face
         """
+        print(f'AWS Data: {aws_data}')
         for timestep in aws_data:
             faces = timestep.get("Faces")
 

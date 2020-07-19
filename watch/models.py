@@ -1,13 +1,14 @@
-from django.db import models
+# from django.db import models
 
-from tinydoor.users.models import User
+# from tinydoor.users.models import User
 
 
+"""
 class Score(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        help_text="User who posted the video being scored.",
+        help_text="User who posted the video being scored."
     )
     video_link = models.CharField(
         max_length=200,
@@ -20,8 +21,9 @@ class Score(models.Model):
     )
 
     def __str__(self):
-        """Return a string representation of the Score."""
+        '''Return a string representation of the Score.'''
         return f"Score for {self.user}, on Video {self.video_link}"
 
     def get_absolute_url(self):
-        """Return a fully qualified path to the Score, to view it later."""
+        '''Return a fully qualified path to the Score, to view it later.'''
+    """
