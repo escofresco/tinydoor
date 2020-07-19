@@ -1,7 +1,7 @@
-tinydoor
+Tinydoor
 ========
 
-Customer analytics for retailers
+Demo video: https://youtu.be/apUk86MRG2E/
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
@@ -15,6 +15,51 @@ Customer analytics for retailers
      :target: https://codecov.io/gh/escofresco/tinydoor
 
 :License: MIT
+
+Overview
+=========
+
+Why Tinydoor?
+--------------
+
+Tinydoor helps retailers track customer satisfaction using computer vision and deep learning.
+
+Brick and mortar business owners need to be able to listen to customers, with the least amount of bias as possible.
+Tinydoor allows business owners to be able to: 
+
+- maintain their existing surveillance camera infrastructure
+- track the emotions of ALL their visitors, not just those who happen to answer customer surveys
+- and communicate easily to their partners how the customer experience is evolving emotionally
+
+Tinydoor can be applied to any industry that still relies upon providing physical experiences - from airports to hotels and hospitals, why not see what Tinydoor will do for you?
+
+
+How does Tinydoor work?
+------------------------
+Demo Link: https://youtu.be/apUk86MRG2E
+
+.. raw:: html
+
+    <iframe src="https://giphy.com/embed/UWtQpqwjzk6saxxyp5" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/ai-computer-science-deep-learning-UWtQpqwjzk6saxxyp5">via GIPHY</a></p>
+        ...
+
+Tinydoor users will be able to hop on the site, https://tinydoor.co, and upload surveillance videos for free.
+
+Then the web app will process those videos, using deep learning provided by AWS Rekognition to detect any and all facial expressions.
+
+Based on how positive the facial expressions in the video file are in general, the web app then outputs a "Customer Satisfaction" score of 0-1 for that video.
+1 means that the people in the video are having a great time, while a score of 0 means the model thinks they are absolutely miserable. 
+
+What is Tinydoor's Mission?
+------------------------------
+
+We need to have a larger conversation about the use of computer vision technology by businesses as well as governments.
+Tinydoor does not reveal the identities of the customers found in the videops it searches, but rather returns a lump sum score for the general sentiment of the group. 
+
+We inted to shed a light upon one possible scenariovof the future, in which AI can bring value to a company while respecting customer privacy.
+
+Technical Details
+==================
 
 
 Settings
