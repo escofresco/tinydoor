@@ -1,8 +1,6 @@
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.test.client import RequestFactory
-from .views import (
-    HomeView,
-)
+from watch.views import HomeView
 
 
 class HomeViewTests(TestCase):
@@ -15,7 +13,7 @@ class HomeViewTests(TestCase):
         self.factory = RequestFactory()
 
     def test_true_is_true(self):
-        '''Canary test to make sure environment is working correctly.'''
+        """Canary test to make sure environment is working correctly."""
         self.assertEqual(True, True)
 
     def test_get_home_view(self):
@@ -23,7 +21,7 @@ class HomeViewTests(TestCase):
         User is able to access the home page and
         get a HTTP 200 response
         """
-        request = self.factory.get('home')
+        request = self.factory.get("home")
         response = HomeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 

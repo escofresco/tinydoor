@@ -38,5 +38,4 @@ class WatchedView(TemplateView):
 
             if async_res.ready():
                 return JsonResponse({"ready": True, **async_res.get()})
-
             return JsonResponse({"ready": False})
