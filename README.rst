@@ -36,12 +36,7 @@ Tinydoor can be applied to any industry that still relies upon providing physica
 
 How does Tinydoor work?
 ------------------------
-Demo Link: https://youtu.be/apUk86MRG2E
-
-.. raw:: html
-
-    <iframe src="https://giphy.com/embed/UWtQpqwjzk6saxxyp5" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/ai-computer-science-deep-learning-UWtQpqwjzk6saxxyp5">via GIPHY</a></p>
-        ...
+See the Demo: https://youtu.be/apUk86MRG2E
 
 Tinydoor users will be able to hop on the site, https://tinydoor.co, and upload surveillance videos for free.
 
