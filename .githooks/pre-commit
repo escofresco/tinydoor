@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# Reformats code for staged files, re-stages those files, and calls the
+# original commit message. If that succeeds, then tests are run.
+#
+NEWLINE=$'\n'
+MSG_DECOR="~~~~~~~"
+ERRMSG_PREFIX="${MSG_DECOR} Whoops! git commit failed :0 \
+${MSG_DECOR}${NEWLINE}"
+
+COMMIT_COMMAND="!!"
+./beautify
+
+# Exit code equals output of last command
+REFORMAT_EXITCODE=$?
+
+if [ $REFORMAT_EXITCODE -eq 0 ]
+	# reformat succeeded
+	then
+		# String contains all the stages files separated by newline
+		# https://stackoverflow.com/questions/33610682/git-list-of-staged-files
+		FILES="$(git diff --name-only --cached)"
+
+		## Go through each file in FILES and re-stage it
+		# https://unix.stackexchange.com/questions/509714/iterate-through-multiline-string-line-by-line
+		IFS='
+		' # split on newline only
+		set -o noglob
+		for LINE in $FILES
+		do
+		  git add $LINE
+		done
+
+		# Re-run commit since a reformat may have occured
+		eval "$COMMIT_COMMAND" || flake8
+		pytest
+
+		# Exit code equals output of last command
+		TEST_EXITCODE=$?
+
+		if [ $TEST_EXITCODE -eq 0 ]
+			# Tests succeeded
+			then
+				exit 0
+		fi
+		echo "${ERRMSG_PREFIX}Tests failed."
+    	exit 1
+fi
+
+echo "${ERRMSG_PREFIX}Reformat failed."
+exit 1

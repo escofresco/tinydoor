@@ -1,198 +1,216 @@
-import csv
-import boto3
-import json
-import sys
-import os
-
-"""
-with open("credentials.csv", "r") as input:
-    next(input)
-    reader = csv.reader(input)
-    for line in reader:
-        access_key_id = line[2]
-        secret_accees_key = line[3]
-
-
-bucket = "aws-rekognition-un"
-video = "sample1.mp4"
-
-rek = boto3.client(
-    "rekognition",
-    region_name="us-west-1",
-    aws_access_key_id=access_key_id,
-    aws_secret_access_key=secret_accees_key,
-)
-"""
-# sqs = boto3.client('sqs')
-# sns = boto3.client('sns')
-
+# import os
+# import boto3
+# import json
+# import sys
+# import time
+#
+# AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+# region_name = "us-west-1"
+#
+#
 # class VideoDetect:
-#     def __init__(self, bucket, video):
-#         self.jobId = ''
-#         self.rek = boto3.client('rekognition', region_name='us-west-1',
-#                             aws_access_key_id=access_key_id,
-#                             aws_secret_access_key = secret_accees_key)
-#         self.queueUrl = ''
-#         self.roleArn = ''
-#         self.topicArn = ''
+#     """Analyze videos using Rekognition Video API."""
+#
+#     rek = boto3.client("rekognition", region_name)
+#     sqs = boto3.client("sqs", region_name)
+#     sns = boto3.client("sns", region_name)
+#     startJobId = ""
+#     queueUrl = ""
+#     snsTopicArn = ""
+#     processType = ""
+#
+#     def __init__(self, role, bucket, video):
+#         self.roleArn = role
 #         self.bucket = bucket
 #         self.video = video
 #
-#     # def main():
-#     # """"""
-#     #     job_found = False
-#     #     sqs = boto3.client('sqs')
-#     #
-#     #     response = self.rek.start_face_detection(Video={
-#     #                                                 'S3Object': {
-#     #                                                     'Bucket': self.bucket,
-#     #                                                     'Name': self.video,
-#     #                                                 }
-#     #                                             },
-#     #                                             NotificationChannel={
-#     #                                                 'SNSTopicArn': self.topicArn,
-#     #                                                 'RoleArn': self.roleArn
-#     #                                             },
-#     #                                             FaceAttributes='ALL')
-#     #
+#     def GetResultsFaces(self, jobId):
+#         """
+#         Return an array of detected faces (Faces) sorted by the time the faces were detected.
+#         Get the results of face detection by calling get_face_detection().
 #
-#     def get_people_results(self):
-#         """"""
-#         pass
-#
-#     def get_person_tracking(self):
-#         """Get the path tracking
-#        Start person tracking by calling start_person_tracking"""
-#
-#     def get_faces_results(self, job_id):
-#         """Gets face dection results by calling get_face_detection
-#            Start face detection by calling start_detection which returns a job_id"""
-#         max_result = 10
-#         pagination_token = ''
+#         Expected output:
+#             Emotions: [
+#                 {'Type': string, 'Confidence': number},
+#             ]
+#         """
+#         maxResults = 30
+#         paginationToken = ""
 #         finished = False
 #
-#         # JobId: indentifier returned from start_face_detection
-#         # NextToken: if the previous response was incomplete, Rek returns a pagination token.
 #         while finished == False:
-#             response = self.rek.get_face_detection(JobId=self.job_id,
-#                                                    MaxResults=max_result,
-#                                                    NextToken=pagination_token)
+#             response = self.rek.get_face_detection(
+#                 JobId=jobId, MaxResults=maxResults, NextToken=paginationToken
+#             )
 #
-#         print(response['VideoMetadata']['Codec'])
-#         print(str(response['VideoMetadata']['DurationMillis']))
-#         print(response['VideoMetadata']['Format'])
-#         print(response['VideoMetadata']['FrameRate'])
+#             for faceDetection in response["Faces"]:
+#                 max = faceDetection["Face"]["Emotions"][0]
+#                 for emotion in faceDetection["Face"]["Emotions"]:
+#                     if emotion["Confidence"] > max["Confidence"]:
+#                         max = emotion
+#                 print(max)
+#                 print()
 #
-#         for face in response['Face']:
-#             print('Face: ' + str(faceDetection['Face']))
-#             print('Confidence: ' + str(faceDetection['Face']['Confidence']))
-#             print('Timestamp: ' + str(faceDetection['Timestamp']))
-#             print()
+#             if "NextToken" in response:
+#                 paginationToken = response["NextToken"]
+#             else:
+#                 finished = True
 #
-#         # If the response is truncated, Amazon Rekognition returns this token that you can use in the subsequent request to retrieve the next set of faces.
-#         if 'NextToken' in response:
-#             pagination_token = response['NextToken']
-#         else: # If the response is complete.
-#             finished = True
+#     def GetResultsPersons(self, jobId):
+#         """Get person tracking information by calling get_person_tracking()."""
+#         maxResults = 30
+#         paginationToken = ""
+#         finished = False
 #
-#     def start_detection(self):
-#         """"""
-#         response = self.rek.start_face_detection(
-#             Video={
-#                 'S3Object': {
-#                     'Bucket': self.bucket,
-#                     'Name': self.video,
-#                 }
-#             },
-#             NotificationChannel={
-#                 'SNSTopicArn': self.topicArn,
-#                 'RoleArn': self.roleArn
-#             },
-#             FaceAttributes='ALL'
+#         while finished is False:
+#             response = self.rek.get_person_tracking(
+#                 JobId=jobId, MaxResults=maxResults, NextToken=paginationToken
+#             )
+#
+#             print(response["VideoMetadata"]["Codec"])
+#             print(str(response["VideoMetadata"]["DurationMillis"]))
+#             print(response["VideoMetadata"]["Format"])
+#             print(response["VideoMetadata"]["FrameRate"])
+#
+#             for personDetection in response["Persons"]:
+#                 print("Index: " + str(personDetection["Person"]["Index"]))
+#                 print("Timestamp: " + str(personDetection["Timestamp"]))
+#                 print()
+#
+#             if "NextToken" in response:
+#                 paginationToken = response["NextToken"]
+#             else:
+#                 finished = True
+#
+#     def CreateTopicandQueue(self):
+#         """Create a topic to which notifications can be published."""
+#         millis = str(int(round(time.time() * 1000)))
+#
+#         # Create SNS topic
+#         snsTopicName = "AmazonRekognition-TinyDoor" + millis
+#
+#         topicResponse = self.sns.create_topic(Name=snsTopicName)
+#         self.snsTopicArn = topicResponse["TopicArn"]
+#
+#         # create SQS queue
+#         sqsQueueName = "AmazonRekognitionQueue" + millis
+#         self.sqs.create_queue(QueueName=sqsQueueName)
+#         self.queueUrl = self.sqs.get_queue_url(QueueName=sqsQueueName)["QueueUrl"]
+#
+#         attribs = self.sqs.get_queue_attributes(
+#             QueueUrl=self.queueUrl, AttributeNames=["QueueArn"]
+#         )["Attributes"]
+#
+#         sqsQueueArn = attribs["QueueArn"]
+#
+#         # Subscribe SQS queue to SNS topic
+#         self.sns.subscribe(
+#             TopicArn=self.snsTopicArn, Protocol="sqs", Endpoint=sqsQueueArn
 #         )
 #
-#         self.job_id = response['JobId']
-
-
-###############################
-"""
-jobId = ""
-rek = boto3.client(
-    "rekognition",
-    region_name="us-west-1",
-    aws_access_key_id=access_key_id,
-    aws_secret_access_key=secret_accees_key,
-)
-queueUrl = ""
-roleArn = ""
-topicArn = ""
-"""
-
-def get_faces_results(job_id):
-    """Gets face dection results by calling get_face_detection
-       Start face detection by calling start_detection which returns a job_id"""
-    max_result = 10
-    pagination_token = ""
-    finished = False
-
-    # JobId: indentifier returned from start_face_detection
-    # NextToken: if the previous response was incomplete, Rek returns a pagination token.
-    while finished == False:
-        response = rek.get_face_detection(
-            JobId=job_id, MaxResults=max_result, NextToken=pagination_token
-        )
-
-    print(response["VideoMetadata"]["Codec"])
-    print(str(response["VideoMetadata"]["DurationMillis"]))
-    print(response["VideoMetadata"]["Format"])
-    print(response["VideoMetadata"]["FrameRate"])
-
-    for face in response["Face"]:
-        print("Face: " + str(faceDetection["Face"]))
-        print("Confidence: " + str(faceDetection["Face"]["Confidence"]))
-        print("Timestamp: " + str(faceDetection["Timestamp"]))
-        print()
-
-    # If the response is truncated, Amazon Rekognition returns this token that you can use in the subsequent request to retrieve the next set of faces.
-    if "NextToken" in response:
-        pagination_token = response["NextToken"]
-    else:  # If the response is complete.
-        finished = True
-
-
-def start_detection(bucket, video):
-    """"""
-    response = rek.start_face_detection(
-        Video={"S3Object": {"Bucket": bucket, "Name": video,}},
-        # The Amazon SNS topic to which Amazon Rekognition to posts the completion status.
-        # RoleArn: The ARN of an IAM role that gives Amazon Rekognition publishing permissions to the Amazon SNS topic.
-        NotificationChannel={
-            "SNSTopicArn": str(os.getenv('SNS_TOPIC_ARN')),
-            "RoleArn": str(os.getenv('ROLE_ARN'))
-        },
-        FaceAttributes="ALL",
-    )
-
-    return response["JobId"]
-
-"""
-jobId = start_detection(bucket, video)
-print(get_faces_results(jobId))
-"""
-if __name__ == "__main__":
-    # user credentials
-    access_key_id = str(os.getenv('AWS_ACCESS_KEY_ID'))
-    secret_accees_key = str(os.getenv('AWS_SECRET_ACCESS_KEY'))
-    # S3 details
-    bucket = ''
-    video = 'Screen-Recording-2020-06-21-at-3.21.48-PM.flv'
-    # get the Rekognition client
-    rek = boto3.client(
-        "rekognition",
-        region_name="us-west-1",
-        aws_access_key_id=access_key_id,
-        aws_secret_access_key=secret_accees_key,
-    )
-    # do facial recognition
-    jobId = start_detection(bucket, video)
-    print(get_faces_results(jobId))
+#         # Authorize SNS to write SQS queue
+#         policy = """{{
+#           "Version":"2012-10-17",
+#           "Statement":[
+#             {{
+#               "Sid":"MyPolicy",
+#               "Effect":"Allow",
+#               "Principal" : {{"AWS" : "*"}},
+#               "Action":"SQS:SendMessage",
+#               "Resource": "{}",
+#               "Condition":{{
+#                 "ArnEquals":{{
+#                   "aws:SourceArn": "{}"
+#                 }}
+#               }}
+#             }}
+#           ]
+#         }}""".format(
+#             sqsQueueArn, self.snsTopicArn
+#         )
+#
+#         response = self.sqs.set_queue_attributes(
+#             QueueUrl=self.queueUrl, Attributes={"Policy": policy}
+#         )
+#
+#     def DeleteTopicandQueue(self):
+#         """Deletes a topic and all its subscriptions."""
+#         self.sqs.delete_queue(QueueUrl=self.queueUrl)
+#         self.sns.delete_topic(TopicArn=self.snsTopicArn)
+#
+#     def main(self):
+#         """
+#         Start analysis of video in specified bucket.
+#         Face detection is started by a call to start_face_detection.
+#         """
+#         jobFound = False
+#         response = self.rek.start_face_detection(
+#             Video={"S3Object": {"Bucket": self.bucket, "Name": self.video}},
+#             NotificationChannel={
+#                 "RoleArn": self.roleArn,
+#                 "SNSTopicArn": self.snsTopicArn,
+#             },
+#             FaceAttributes="ALL",
+#         )
+#
+#         # response = self.rek.start_person_tracking(Video={'S3Object':{'Bucket':self.bucket,'Name':self.video}},
+#         # NotificationChannel={'RoleArn':self.roleArn, 'SNSTopicArn':self.snsTopicArn})
+#
+#         print("Start Job Id: " + response["JobId"])
+#         dotLine = 0
+#         while jobFound is False:
+#             sqsResponse = self.sqs.receive_message(
+#                 QueueUrl=self.queueUrl,
+#                 MessageAttributeNames=["ALL"],
+#                 MaxNumberOfMessages=10,
+#             )
+#
+#             if sqsResponse:
+#                 if "Messages" not in sqsResponse:
+#                     if dotLine < 20:
+#                         print(".", end="")
+#                         dotLine = dotLine + 1
+#                     else:
+#                         print()
+#                         dotLine = 0
+#                     sys.stdout.flush()
+#                     continue
+#
+#                 for message in sqsResponse["Messages"]:
+#                     notification = json.loads(message["Body"])
+#                     rekMessage = json.loads(notification["Message"])
+#                     print(rekMessage["JobId"])
+#                     print(rekMessage["Status"])
+#                     if str(rekMessage["JobId"]) == response["JobId"]:
+#                         print("Matching Job Found:" + rekMessage["JobId"])
+#                         jobFound = True
+#                         self.GetResultsFaces(rekMessage["JobId"])
+#                         self.sqs.delete_message(
+#                             QueueUrl=self.queueUrl,
+#                             ReceiptHandle=message["ReceiptHandle"],
+#                         )
+#                     else:
+#                         print(
+#                             "Job didn't match:"
+#                             + str(rekMessage["JobId"])
+#                             + " : "
+#                             + str(response["JobId"])
+#                         )
+#                     # Delete the unknown message. Consider sending to dead letter queue
+#                     self.sqs.delete_message(
+#                         QueueUrl=self.queueUrl, ReceiptHandle=message["ReceiptHandle"]
+#                     )
+#
+#         print("done")
+#
+#
+# if __name__ == "__main__":
+#     roleArn = "arn:aws:iam::623782584215:role/tinydoor-rekognition"
+#     bucket = "tinydoor-client-uploads"
+#     video = "emotion-test/Screen Recording 2020-06-28 at 12.52.49 PM.mov"
+#
+#     analyzer = VideoDetect(roleArn, bucket, video)
+#     analyzer.CreateTopicandQueue()
+#     analyzer.main()
+#     analyzer.DeleteTopicandQueue()

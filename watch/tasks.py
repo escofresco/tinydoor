@@ -1,13 +1,22 @@
-from __future__ import absolute_import, unicode_literals
-import celery
-from config.celery_app import app
+from urllib.parse import urlparse
+
 from celery import shared_task
-from .helpers import *
-from .video_detect import VideoDetect
+from doorknob import Scene, VideoDetect
 
 
 @shared_task
 def start_watching(file_url):
+    file_path = urlparse(file_url).path.strip("/")
+    analyzer = VideoDetect(file_path)
+    results = None
+    analyzer.CreateTopicandQueue()
+    analyzer.StartFaceDetection()
+
+    if analyzer.GetSQSMessageSuccess():
+        results = analyzer.GetFaceDetectionResults()
+    analyzer.DeleteTopicandQueue()
+    scene = Scene(results)
+    print(results)
     return {
-        "people_count": 33,
+        "score": scene.valence,
     }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from django.urls import reverse, reverse_lazy
@@ -6,6 +7,9 @@ from .views import (
     WatchedView,
 )
 from django.core.files.uploadedfile import SimpleUploadedFile
+=======
+# from django.test import TestCase
+>>>>>>> d73d6663dcf7d48dccac72e30a04d64b2b49ec95
 
 
 class HomeViewTests(TestCase):
