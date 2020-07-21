@@ -30,12 +30,14 @@ class WatchedView(TemplateView):
     template_name = "pages/watched.html"
 
     def get(self, request, task_id):
+        print(f'Sending a GET Request! Task id is: {task_id}')
         return render(request, self.template_name, {"task_id": task_id})
 
     def post(self, request, *args, **kwargs):
+        print('Sending a POST Request!')
         if "task_id" in request.POST:
             async_res = start_watching.AsyncResult(request.POST["task_id"])
-
+            print(f'Task id is: {request.POST["task_id"]}')
             if async_res.ready():
                 return JsonResponse({"ready": True, **async_res.get()})
             return JsonResponse({"ready": False})
