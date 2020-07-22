@@ -18,7 +18,8 @@ class Score(models.Model):
     )
     emotion_score = models.FloatField(
         help_text=("Tinydoor score for gauging positive customer experience."),
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
 
     def __str__(self):

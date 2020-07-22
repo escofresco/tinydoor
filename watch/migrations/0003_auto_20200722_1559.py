@@ -9,13 +9,18 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('watch', '0002_auto_20200722_1517'),
+        ("watch", "0002_auto_20200722_1517"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='score',
-            name='user',
-            field=models.ForeignKey(help_text='User who posted the video being scored.', null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            model_name="score",
+            name="user",
+            field=models.ForeignKey(
+                help_text="User who posted the video being scored.",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

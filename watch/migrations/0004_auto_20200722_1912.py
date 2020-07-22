@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('watch', '0003_auto_20200722_1559'),
+        ("watch", "0003_auto_20200722_1559"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='score',
-            name='emotion_score',
-            field=models.FloatField(blank=True, help_text='Tinydoor score for gauging positive customer experience.', null=True),
+            model_name="score",
+            name="emotion_score",
+            field=models.FloatField(
+                blank=True,
+                help_text="Tinydoor score for gauging positive customer experience.",
+                null=True,
+            ),
         ),
     ]

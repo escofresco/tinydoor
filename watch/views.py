@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.db.models import FloatField
 
 from .forms import EmptyForm
 from .models import Score
@@ -34,10 +33,7 @@ class WatchedView(TemplateView):
     def get(self, request, task_id):
         # get the Score model with this task_id
         score = Score.objects.filter(task_id=task_id).first()
-        context = {
-           "model": score,
-           "task_id": task_id
-        }
+        context = {"model": score, "task_id": task_id}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -47,14 +43,14 @@ class WatchedView(TemplateView):
             # save initial Score model
             post_user = request.user  # set user object
             score = Score.objects.create(
-                    user=post_user if post_user.is_authenticated else None,
-                    task_id=task_identifier,
-                    emotion_score=None
-                )
+                user=post_user if post_user.is_authenticated else None,
+                task_id=task_identifier,
+                emotion_score=None,
+            )
             score.save()
             if async_res.ready():
                 # construct JSON we log on the console
-                val_score = float(async_res.get("score")['score'])
+                val_score = float(async_res.get("score")["score"])
                 # now we're ready to add score to the model created before
                 update_score = Score.objects.get(task_id=task_identifier)
                 update_score.emotion_score = val_score
