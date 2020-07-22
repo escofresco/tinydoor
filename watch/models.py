@@ -8,6 +8,7 @@ class Score(models.Model):
         User,
         on_delete=models.PROTECT,
         help_text="User who posted the video being scored.",
+        null=True,
     )
     task_id = models.CharField(
         max_length=200,

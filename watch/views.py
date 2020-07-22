@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.db.models import FloatField
 
 from .forms import EmptyForm
+from .models import Score
 from .tasks import start_watching
 
 
@@ -34,10 +36,20 @@ class WatchedView(TemplateView):
         return render(request, self.template_name, {"task_id": task_id})
 
     def post(self, request, *args, **kwargs):
-        print("Sending a POST Request!")
         if "task_id" in request.POST:
-            async_res = start_watching.AsyncResult(request.POST["task_id"])
-            print(f'Task id is: {request.POST["task_id"]}')
+            task_identifier = request.POST["task_id"]
+            async_res = start_watching.AsyncResult(task_identifier)
             if async_res.ready():
+                # construct JSON we log on the console
+                print('Score is ready!')
+                val_score = float(async_res.get("score")['score'])
+                # now we're ready to save a new model
+                post_user = request.user  # set user object
+                score = Score.objects.create(
+                    user=post_user if post_user.is_authenticated else None,
+                    task_id=task_identifier,
+                    emotion_score=val_score
+                )
+                score.save()
                 return JsonResponse({"ready": True, **async_res.get()})
             return JsonResponse({"ready": False})
