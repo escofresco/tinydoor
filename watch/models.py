@@ -17,7 +17,8 @@ class Score(models.Model):
         help_text=("Link to the Celery task that " + "scored the video."),
     )
     emotion_score = models.FloatField(
-        help_text=("Tinydoor score for gauging positive customer experience.")
+        help_text=("Tinydoor score for gauging positive customer experience."),
+        blank=True, null=True
     )
 
     def __str__(self):

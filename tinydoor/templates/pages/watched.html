@@ -4,34 +4,38 @@
 <h2 class="mt-2">Video Results</h2>
 <h5>Your Tinydoor Customer Satisfaction Score Will Appear Below:</h5>
 <p class="ml-2" id="content-text">
-      <!-- Score logged here-->  
+      <!-- Score logged here-->
+      {{ model.emotion_score }}  
+      <!-- Other Score info -->
 </p>
 {% endblock content %}
 
 {% block javascript %}
-{{ block.super }}
-<script>
-(function poll() {
-    $.ajax({
-        type: "POST",
-        url: "/{{ task_id }}/",
-        data: {
-            task_id: "{{ task_id }}",
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-        }, success: function(data) {
-            if (data.ready) {
-                console.log("ready");
-                console.log(data);
-                $("#content-text").text(data["score"]);
-            } else {
-                console.log(data);
-                console.log("not ready");
-                setTimeout(poll, 5000);
-            }
-        }, error: function(XMLHttpRequest, textStatus, errorThrown) {
-            $("#results").text("Status " + textStatus + " Error: " + errorThrown);
-        }
-    });
-})();
-</script>
+    {% if model.emotion_score is None %}
+        {{ block.super }}
+        <script>
+        (function poll() {
+            $.ajax({
+                type: "POST",
+                url: "/{{ task_id }}/",
+                data: {
+                    task_id: "{{ task_id }}",
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                }, success: function(data) {
+                    if (data.ready) {
+                        console.log("ready");
+                        console.log(data);
+                        $("#content-text").text(data["score"]);
+                    } else {
+                        console.log(data);
+                        console.log("not ready");
+                        setTimeout(poll, 5000);
+                    }
+                }, error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $("#results").text("Status " + textStatus + " Error: " + errorThrown);
+                }
+            });
+        })();
+        </script>
+    {% endif %}
 {% endblock javascript %}

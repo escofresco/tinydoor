@@ -32,24 +32,32 @@ class WatchedView(TemplateView):
     template_name = "pages/watched.html"
 
     def get(self, request, task_id):
-        print(f"Sending a GET Request! Task id is: {task_id}")
-        return render(request, self.template_name, {"task_id": task_id})
+        # get the Score model with this task_id
+        score = Score.objects.filter(task_id=task_id).first()
+        context = {
+           "model": score,
+           "task_id": task_id
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         if "task_id" in request.POST:
             task_identifier = request.POST["task_id"]
             async_res = start_watching.AsyncResult(task_identifier)
-            if async_res.ready():
-                # construct JSON we log on the console
-                print('Score is ready!')
-                val_score = float(async_res.get("score")['score'])
-                # now we're ready to save a new model
-                post_user = request.user  # set user object
-                score = Score.objects.create(
+            # save initial Score model
+            post_user = request.user  # set user object
+            score = Score.objects.create(
                     user=post_user if post_user.is_authenticated else None,
                     task_id=task_identifier,
-                    emotion_score=val_score
+                    emotion_score=None
                 )
-                score.save()
+            score.save()
+            if async_res.ready():
+                # construct JSON we log on the console
+                val_score = float(async_res.get("score")['score'])
+                # now we're ready to add score to the model created before
+                update_score = Score.objects.get(task_id=task_identifier)
+                update_score.emotion_score = val_score
+                update_score.save()
                 return JsonResponse({"ready": True, **async_res.get()})
             return JsonResponse({"ready": False})
