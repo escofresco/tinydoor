@@ -1,8 +1,6 @@
 Tinydoor
 ========
 
-Demo video: https://youtu.be/apUk86MRG2E/
-
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
      :alt: Built with Cookiecutter Django
@@ -15,6 +13,10 @@ Demo video: https://youtu.be/apUk86MRG2E/
      :target: https://codecov.io/gh/escofresco/tinydoor
 
 :License: MIT
+
+.. raw:: html
+
+    <img src="https://giphy.com/embed/UVXpGlDTa4OSqyC1f4" width="480" height="270" alt="A user uploads a video to Tinydoor and gets a score."/>
 
 Overview
 =========
