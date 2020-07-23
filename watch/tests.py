@@ -40,3 +40,8 @@ class WatchedViewTests(TestCase):
         """
         self.client = Client()
         self.factory = RequestFactory()
+
+    def test_post(self):
+        """
+        The celery task id is saved into a Score model.
+        """
