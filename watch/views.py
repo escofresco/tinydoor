@@ -25,35 +25,53 @@ class HomeView(TemplateView):
 
 
 class WatchedView(TemplateView):
-    """Calls pipeline with the task id passed by the url, then displays the
-    results."""
+    """
+    Calls pipeline with the task id passed by the url,
+    then displays the results.
+    """
 
     template_name = "pages/watched.html"
 
     def get(self, request, task_id):
-        # get the Score model with this task_id
-        score = Score.objects.filter(task_id=task_id).first()
-        context = {"model": score, "task_id": task_id}
+        # add the task id to the context
+        context = {"task_id": task_id}
+        # query for the Score model with this task_id
+        score_queryset = Score.objects.filter(task_id=task_id)
+        # if the QuerySet has something, add it to the context too
+        if len(score_queryset) > 0:
+            context["model"] = score_queryset.first()
+        # send the response to the server
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        """
+        Instaniate a Score model based upon the video upload.
+
+        Parameters:
+        request(HttpRequest): the POST request object sent to the server
+
+        Returns: JsonResponse: includes two fields to indicate whether
+                 the valence score if finished beding calculated yet
+                 or not. Is logged repeatedly to the console until the
+                 "ready" field holds a True value. This score value is
+                 then encapsulated in a new Score model instance.
+
+        """
         if "task_id" in request.POST:
             task_identifier = request.POST["task_id"]
             async_res = start_watching.AsyncResult(task_identifier)
-            # save initial Score model
-            post_user = request.user  # set user object
-            score = Score.objects.create(
-                user=post_user if post_user.is_authenticated else None,
-                task_id=task_identifier,
-                emotion_score=None,
-            )
-            score.save()
+            # save Score if the results are ready
             if async_res.ready():
                 # construct JSON we log on the console
                 val_score = float(async_res.get("score")["score"])
-                # now we're ready to add score to the model created before
-                update_score = Score.objects.get(task_id=task_identifier)
-                update_score.emotion_score = val_score
-                update_score.save()
+                # get the user
+                post_user = request.user  # set user object
+                # make a new model instance
+                score = Score.objects.create(
+                    user=post_user if post_user.is_authenticated else None,
+                    task_id=task_identifier,
+                    emotion_score=val_score,
+                )
+                score.save()
                 return JsonResponse({"ready": True, **async_res.get()})
             return JsonResponse({"ready": False})

@@ -4,14 +4,15 @@
 <h2 class="mt-2">Video Results</h2>
 <h5>Your Tinydoor Customer Satisfaction Score Will Appear Below:</h5>
 <p class="ml-2" id="content-text">
-      <!-- Score logged here-->
-      {{ model.emotion_score }}  
-      <!-- Other Score info -->
+      <!-- Score info goes here-->
+        {% if model %}
+            {{ model.emotion_score }}  
+        {% endif %}
 </p>
 {% endblock content %}
 
 {% block javascript %}
-    {% if model.emotion_score is None %}
+    {% if not model %}
         {{ block.super }}
         <script>
         (function poll() {
