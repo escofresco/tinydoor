@@ -33,6 +33,19 @@ class WatchedView(TemplateView):
     template_name = "pages/watched.html"
 
     def get(self, request, task_id):
+        """
+        Return a view of one specific Score model.
+
+        Parameters:
+        request(HttpRequest): the GET request object sent to the server
+        task_id(str): the id of the Celery task that
+                      is encapsulated by one of the
+                      Score models. Each task id is
+                      unique.
+
+        Returns: HttpResponse of the WatchedView template.
+
+        """
         # add the task id to the context
         context = {"task_id": task_id}
         # query for the Score model with this task_id
