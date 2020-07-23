@@ -14,10 +14,6 @@ Tinydoor
 
 :License: MIT
 
-.. raw:: html
-
-    <img src="https://giphy.com/embed/UVXpGlDTa4OSqyC1f4" width="480" height="270" alt="A user uploads a video to Tinydoor and gets a score."/>
-
 Overview
 =========
 
