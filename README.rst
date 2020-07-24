@@ -1,6 +1,8 @@
 Tinydoor
 ========
+A robust way to score the experience of your customers, one video at a time.
 
+.. image:: https://media.giphy.com/media/UVXpGlDTa4OSqyC1f4/giphy.gif
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
      :alt: Built with Cookiecutter Django
