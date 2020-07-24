@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from django.urls import reverse, reverse_lazy
@@ -10,6 +11,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 =======
 # from django.test import TestCase
 >>>>>>> d73d6663dcf7d48dccac72e30a04d64b2b49ec95
+=======
+from django.test import Client, TestCase
+from django.test.client import RequestFactory
+from watch.views import HomeView
+>>>>>>> c7b73082a79eef302b7168ff3e80dc3c2293398b
 
 
 class HomeViewTests(TestCase):
@@ -22,7 +28,7 @@ class HomeViewTests(TestCase):
         self.factory = RequestFactory()
 
     def test_true_is_true(self):
-        '''Canary test to make sure environment is working correctly.'''
+        """Canary test to make sure environment is working correctly."""
         self.assertEqual(True, True)
 
     def test_get_home_view(self):
@@ -30,7 +36,7 @@ class HomeViewTests(TestCase):
         User is able to access the home page and
         get a HTTP 200 response
         """
-        request = self.factory.get('home')
+        request = self.factory.get("home")
         response = HomeView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
@@ -39,7 +45,6 @@ class HomeViewTests(TestCase):
         User is able to upload a file to the view,
         and is redirected (receives a HTTP 302).
         """
-        pass
 
 
 class WatchedViewTests(TestCase):

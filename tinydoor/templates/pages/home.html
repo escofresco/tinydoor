@@ -8,6 +8,7 @@
 {% endblock css %}
 
 {% block content %}
+<<<<<<< HEAD
   <p>Welcome to</p>
   <div class="d-flex col-md-6 justify-content-center align-items-center">
     <button id='browse'>Upload</button>
@@ -17,6 +18,34 @@
     <small>Please upload your content here</small>
   </div>
   </p>
+=======
+
+
+    <div class="container">
+      <div class="row justify-content-around align-items-center">
+        <div class="col-8 col-md-7 col-lg-6 order-md-2 mb-5 mb-md-0">
+          <img alt="Image" src="../../static/images/pablo-face-recognition.png" class="w-100" />
+        </div>
+        <!--end of col-->
+        <div class="col-12 col-md-6 col-lg-5 order-md-1">
+          <h1 class="display-4">Measure User Satisfaction</h1>
+          <span class="lead">
+            A robust way to score the experience of your customers, one video
+            at a time.
+          </span>
+          <div class="mb-4">
+            <span class="text-muted text-small">Get started by trying a demo.</span>
+          </div>
+          <button id='browse' class="btn btn-primary btn-lg">Get started now</button>
+          <a href="{% url 'about' %}" class="btn btn-link btn-lg"><i class="icon-controller-play">&nbsp;</i>Why Tiny Door</a>
+        </div>
+        <!--end of col-->
+      </div>
+      <!--end of row-->
+    </div>
+    <!--end of container-->
+  <!--end of section-->
+>>>>>>> c7b73082a79eef302b7168ff3e80dc3c2293398b
 {% endblock content %}
 
 {% block javascript %}
