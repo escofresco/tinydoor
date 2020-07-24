@@ -8,7 +8,7 @@ urlpatterns = [
     path("", HomeView.as_view(), name="home"),
     path("<str:task_id>/", WatchedView.as_view(), name="watched-view"),
     # about page
-    path(
-        "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
+    path("about/",
+        TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
 ]
