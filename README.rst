@@ -183,7 +183,7 @@ See detailed `cookiecutter-django Heroku documentation`_.
 
 
 Custom Bootstrap Compilation
-^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The generated CSS is set up with automatic Bootstrap recompilation with variables of your choice.
 Bootstrap v4 is installed using npm and customised by tweaking your variables in ``static/sass/custom_bootstrap_vars``.
