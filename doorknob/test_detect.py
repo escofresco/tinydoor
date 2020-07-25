@@ -19,7 +19,6 @@ MESSAGE_FROM_SQS = (
     + ':some-topic:2bcfbf39-05c3-41de-beaa-fcfcc21c8f55"\n}'
 )
 
-SNS_TOPIC_NAME = "mock-aws-sns-to-rekognition"
 
 class VideoDetectTestCase(unittest.TestCase):
     """
@@ -27,7 +26,7 @@ class VideoDetectTestCase(unittest.TestCase):
     """
     @mock_sqs
     @mock_sns
-    def test_publish_to_sqs(self):
+    def test_publish_result_to_sqs(self):
         conn = boto3.client("sns", region_name="us-west-1")
         conn.create_topic(Name="some-topic")
         response = conn.list_topics()
@@ -59,41 +58,46 @@ class VideoDetectTestCase(unittest.TestCase):
         )
         # print("Acquired: ", acquired_message)
         # print("Expected: ", expected)
-        # for key in acquired_message:
-        #     assert acquired_message[key] == expected[key]
+        # print(messages[0].body)
+
         assert acquired_message == expected
 
     @mock_sns
     def test_create_and_delete_topic(self):
         conn = boto3.client("sns", region_name="us-west-1")
-        for topic_name in ("some-topic", "-some-topic-", "_some-topic_"):
-            conn.create_topic(Name=topic_name)
+        topic_name = "some-topic"
+        conn.create_topic(Name=topic_name)
 
-            topics_json = conn.list_topics()
-            topics = topics_json["Topics"]
-            assert len(topics) == 1
-            assert topics[0]['TopicArn'] == "arn:aws:sns:{0}:{1}:{2}".format(conn._client_config.region_name, ACCOUNT_ID, topic_name)
+        topics_json = conn.list_topics()
+        topics = topics_json["Topics"]
+        assert len(topics) == 1
+        assert topics[0]['TopicArn'] == "arn:aws:sns:{0}:{1}:{2}".format(conn._client_config.region_name, ACCOUNT_ID, topic_name)
 
-            # Delete the topic
-            conn.delete_topic(TopicArn=topics[0]["TopicArn"])
+        # Delete the topic
+        conn.delete_topic(TopicArn=topics[0]["TopicArn"])
 
-            # And there should now be 0 topics
-            topics_json = conn.list_topics()
-            topics = topics_json["Topics"]
-            assert len(topics) == 0
+        # And there should now be 0 topics
+        topics_json = conn.list_topics()
+        topics = topics_json["Topics"]
+        assert len(topics) == 0
 
     @mock_sqs
-    def test_create_queue(self):
-        sqs = boto3.resource("sqs", region_name="us-west-1")
+    def test_create_and_delete_queue(self):
+        sqs = boto3.client("sqs", region_name="us-west-1")
+        sqs.create_queue(QueueName="test-queue")
 
-        new_queue = sqs.create_queue(QueueName="test-queue")
-        assert new_queue is not None
+        queues_json = sqs.list_queues()
+        assert len(queues_json["QueueUrls"]) == 1
 
-        queue = sqs.get_queue_by_name(QueueName="test-queue")
-        assert queue is not None
-        assert queue.url == new_queue.url
-        assert queue.url.split("/")[-1] == "test-queue"
-        assert queue.url.split("/")[2].split(".")[0] == "us-west-1"
+        queue_url = sqs.get_queue_url(QueueName="test-queue")["QueueUrl"]
+        assert queue_url.split("/")[-1] == "test-queue"
+        assert queue_url.split("/")[2].split(".")[0] == "us-west-1"
+
+        # Delete the topic
+        sqs.delete_queue(QueueUrl=queue_url)
+        queues_json = sqs.list_queues()
+        assert "QueueUrls" not in queues_json
+
 
 if __name__ == '__main__':
     unittest.main()
