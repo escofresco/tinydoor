@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from django.urls import reverse, reverse_lazy
@@ -8,14 +6,6 @@ from .views import (
     WatchedView,
 )
 from django.core.files.uploadedfile import SimpleUploadedFile
-=======
-# from django.test import TestCase
->>>>>>> d73d6663dcf7d48dccac72e30a04d64b2b49ec95
-=======
-from django.test import Client, TestCase
-from django.test.client import RequestFactory
-from watch.views import HomeView
->>>>>>> c7b73082a79eef302b7168ff3e80dc3c2293398b
 
 
 class HomeViewTests(TestCase):
@@ -62,3 +52,7 @@ class WatchedViewTests(TestCase):
     #     file_dict = {'file': SimpleUploadedFile(upload_file.name, upload_file.read())}
     #     form = MyForm(post_dict, file_dict)
     #     self.assertTrue(form.is_valid())
+    def test_post(self):
+        """
+        The celery task id is saved into a Score model.
+        """

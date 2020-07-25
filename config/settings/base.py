@@ -63,10 +63,7 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-<<<<<<< HEAD
-=======
     "watch.apps.WatchConfig",
->>>>>>> c7b73082a79eef302b7168ff3e80dc3c2293398b
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
