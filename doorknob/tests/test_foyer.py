@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from foyer import Scene
+from doorknob.foyer import Scene
 
 class SceneTestCase(unittest.TestCase):
     def test_valence(self):
