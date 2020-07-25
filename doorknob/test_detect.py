@@ -19,6 +19,10 @@ MESSAGE_FROM_SQS = (
     + ':some-topic:2bcfbf39-05c3-41de-beaa-fcfcc21c8f55"\n}'
 )
 
+# MESSAGE_FROM_SQS = (
+#     '{}'
+# )
+
 
 class VideoDetectTestCase(unittest.TestCase):
     """
@@ -26,6 +30,43 @@ class VideoDetectTestCase(unittest.TestCase):
     """
     @mock_sqs
     @mock_sns
+    # def test_publish_result_to_sqs(self):
+    #     conn = boto3.client("sns", region_name="us-west-1")
+    #     conn.create_topic(Name="some-topic")
+    #     response = conn.list_topics()
+    #     topic_arn = response["Topics"][0]["TopicArn"]
+    #
+    #     sqs_conn = boto3.client("sqs", region_name="us-west-1")
+    #     sqs_conn.create_queue(QueueName="test-queue")
+    #
+    #     conn.subscribe(
+    #         TopicArn=topic_arn,
+    #         Protocol="sqs",
+    #         Endpoint="arn:aws:sqs:us-west-1:{}:test-queue".format(ACCOUNT_ID),
+    #     )
+    #     message = "my message"
+    #
+    #     with freeze_time("2020-07-24 12:00:00"):
+    #         published_message = conn.publish(TopicArn=topic_arn, Message=message)
+    #     published_message_id = published_message["MessageId"]
+    #
+    #     # fetch queue
+    #     queueUrl = sqs_conn.get_queue_url(QueueName="test-queue")
+    #     messages = sqs_conn.receive_message(MaxNumberOfMessages=1, QueueUrl=queueUrl['QueueUrl'])
+    #     print("m: ", messages['Messages'])
+    #
+    #     expected = MESSAGE_FROM_SQS % (message, published_message_id, "us-west-1")
+    #     acquired_message = re.sub(
+    #         r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
+    #         "2020-07-24T12:00:00.000Z",
+    #         messages['Messages'],
+    #     )
+    #     print("Acquired: ", acquired_message)
+    #     print("Expected: ", expected)
+    #     # print(messages[0].body)
+
+        # assert acquired_message == expected
+
     def test_publish_result_to_sqs(self):
         conn = boto3.client("sns", region_name="us-west-1")
         conn.create_topic(Name="some-topic")
@@ -52,15 +93,17 @@ class VideoDetectTestCase(unittest.TestCase):
 
         expected = MESSAGE_FROM_SQS % (message, published_message_id, "us-west-1")
         acquired_message = re.sub(
-            "\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
-            "2020-07-24T12:00:00.000Z",
+            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
+            r"2020-07-24T12:00:00.000Z",
             messages[0].body,
         )
-        # print("Acquired: ", acquired_message)
+        # print(messages[0].body)
+        print("Acquired: ", acquired_message)
         # print("Expected: ", expected)
         # print(messages[0].body)
 
         assert acquired_message == expected
+
 
     @mock_sns
     def test_create_and_delete_topic(self):
