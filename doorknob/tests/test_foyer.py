@@ -2,10 +2,6 @@ import json
 import unittest
 
 from doorknob.foyer import Scene
-<<<<<<< HEAD
-=======
-
->>>>>>> 7947f58b3010bd6e94e4351e2d33a23f81608875
 
 class SceneTestCase(unittest.TestCase):
     def test_valence(self):
