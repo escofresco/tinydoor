@@ -1,12 +1,10 @@
-import unittest
-import boto3
 import re
+import unittest
 
-from unittest import mock
+import boto3
 from freezegun import freeze_time
-from detect import VideoDetect
-
 from moto import mock_sns, mock_sqs
+
 # from moto.core import ACCOUNT_ID
 
 ACCOUNT_ID = "123456789012"
@@ -24,6 +22,7 @@ class VideoDetectTestCase(unittest.TestCase):
     """
     Tests that the VideoDetect properties and functions work correctly.
     """
+
     @mock_sqs
     @mock_sns
     def test_publish_result_to_sqs(self):
@@ -52,7 +51,7 @@ class VideoDetectTestCase(unittest.TestCase):
 
         expected = MESSAGE_FROM_SQS % (message, published_message_id, "us-west-1")
         acquired_message = re.sub(
-            "\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
+            '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z',
             "2020-07-24T12:00:00.000Z",
             messages[0].body,
         )
@@ -71,7 +70,9 @@ class VideoDetectTestCase(unittest.TestCase):
         topics_json = conn.list_topics()
         topics = topics_json["Topics"]
         assert len(topics) == 1
-        assert topics[0]['TopicArn'] == "arn:aws:sns:{0}:{1}:{2}".format(conn._client_config.region_name, ACCOUNT_ID, topic_name)
+        assert topics[0]["TopicArn"] == "arn:aws:sns:{0}:{1}:{2}".format(
+            conn._client_config.region_name, ACCOUNT_ID, topic_name
+        )
 
         # Delete the topic
         conn.delete_topic(TopicArn=topics[0]["TopicArn"])
@@ -99,5 +100,5 @@ class VideoDetectTestCase(unittest.TestCase):
         assert "QueueUrls" not in queues_json
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

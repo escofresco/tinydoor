@@ -3,6 +3,7 @@ import unittest
 
 from foyer import Scene
 
+
 class SceneTestCase(unittest.TestCase):
     def test_valence(self):
         filename = "doorknob/tests/long_rekognition_face_response.txt"
@@ -15,6 +16,7 @@ class SceneTestCase(unittest.TestCase):
         with open(filename) as f:
             with self.assertRaises(ValueError):
                 Scene(aws_data=json.load(f))
+
 
 class VideoDetectTestCase(unittest.TestCase):
     """
