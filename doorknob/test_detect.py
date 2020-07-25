@@ -10,9 +10,20 @@ from moto import mock_sns, mock_sqs
 ACCOUNT_ID = "123456789012"
 
 MESSAGE_FROM_SQS = (
-    '{\n  "Message": "%s",\n  "MessageId": "%s",\n  "Signature": "EXAMPLElDMXvB8r9R83tGoNn0ecwd5UjllzsvSvbItzfaMpN2nk5HVSw7XnOn/49IkxDKz8YrlH2qJXj2iZB0Zo2O71c4qQk1fMUDi3LGpij7RCW7AW9vYYsSqIKRnFS94ilu7NFhUzLiieYr4BKHpdTmdD6c0esKEYBpabxDSc=",\n  "SignatureVersion": "1",\n  "SigningCertURL": "https://sns.us-west-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",\n  "Subject": "my subject",\n  "Timestamp": "2020-07-24T12:00:00.000Z",\n  "TopicArn": "arn:aws:sns:%s:'
+    '{\n  "Message": "%s",\n  "MessageId": "%s",\n '
+    + '"Signature":"EXAMPLElDMXvB8r9R83tGoNn0ecwd5UjllzsvSvbItzfaMpN2nk5HVSw7'
+    + "XnOn/49IkxDKz8YrlH2qJXj2iZB0Zo2O71c4qQk1fMUDi3LGpij7RCW7AW9vYYsSqIKRnFS"
+    + '94ilu7NFhUzLiieYr4BKHpdTmdD6c0esKEYBpabxDSc=",\n  "SignatureVersion": '
+    + '"1",\n  "SigningCertURL": "https://sns.us-west-1.amazonaws.com/'
+    + 'SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",\n  '
+    + '"Subject": "my subject",\n  "Timestamp": "2020-07-24T12:00:00.000Z",\n'
+    + '  "TopicArn": "arn:aws:sns:%s:'
     + ACCOUNT_ID
-    + ':some-topic",\n  "Type": "Notification",\n  "UnsubscribeURL": "https://sns.us-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-1:'
+    + ':some-topic",\n'
+    + '"Type": "Notification",\n'
+    + '"UnsubscribeURL":'
+    + '"https://sns.us-west-1.amazonaws.com/?Action='
+    + "Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-1:"
     + ACCOUNT_ID
     + ':some-topic:2bcfbf39-05c3-41de-beaa-fcfcc21c8f55"\n}'
 )
@@ -51,7 +62,7 @@ class VideoDetectTestCase(unittest.TestCase):
 
         expected = MESSAGE_FROM_SQS % (message, published_message_id, "us-west-1")
         acquired_message = re.sub(
-            '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z',
+            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
             "2020-07-24T12:00:00.000Z",
             messages[0].body,
         )
