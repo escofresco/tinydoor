@@ -1,20 +1,29 @@
-import unittest
-import boto3
 import re
+import unittest
 
-from unittest import mock
+import boto3
 from freezegun import freeze_time
-from detect import VideoDetect
-
 from moto import mock_sns, mock_sqs
+
 # from moto.core import ACCOUNT_ID
 
 ACCOUNT_ID = "123456789012"
 
 MESSAGE_FROM_SQS = (
-    '{\n  "Message": "%s",\n  "MessageId": "%s",\n  "Signature": "EXAMPLElDMXvB8r9R83tGoNn0ecwd5UjllzsvSvbItzfaMpN2nk5HVSw7XnOn/49IkxDKz8YrlH2qJXj2iZB0Zo2O71c4qQk1fMUDi3LGpij7RCW7AW9vYYsSqIKRnFS94ilu7NFhUzLiieYr4BKHpdTmdD6c0esKEYBpabxDSc=",\n  "SignatureVersion": "1",\n  "SigningCertURL": "https://sns.us-west-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",\n  "Subject": "my subject",\n  "Timestamp": "2020-07-24T12:00:00.000Z",\n  "TopicArn": "arn:aws:sns:%s:'
+    '{\n  "Message": "%s",\n  "MessageId": "%s",\n '
+    + '"Signature":"EXAMPLElDMXvB8r9R83tGoNn0ecwd5UjllzsvSvbItzfaMpN2nk5HVSw7'
+    + "XnOn/49IkxDKz8YrlH2qJXj2iZB0Zo2O71c4qQk1fMUDi3LGpij7RCW7AW9vYYsSqIKRnFS"
+    + '94ilu7NFhUzLiieYr4BKHpdTmdD6c0esKEYBpabxDSc=",\n  "SignatureVersion": '
+    + '"1",\n  "SigningCertURL": "https://sns.us-west-1.amazonaws.com/'
+    + 'SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",\n  '
+    + '"Subject": "my subject",\n  "Timestamp": "2020-07-24T12:00:00.000Z",\n'
+    + '  "TopicArn": "arn:aws:sns:%s:'
     + ACCOUNT_ID
-    + ':some-topic",\n  "Type": "Notification",\n  "UnsubscribeURL": "https://sns.us-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-1:'
+    + ':some-topic",\n'
+    + '"Type": "Notification",\n'
+    + '"UnsubscribeURL":'
+    + '"https://sns.us-west-1.amazonaws.com/?Action='
+    + "Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-1:"
     + ACCOUNT_ID
     + ':some-topic:2bcfbf39-05c3-41de-beaa-fcfcc21c8f55"\n}'
 )
@@ -24,6 +33,7 @@ class VideoDetectTestCase(unittest.TestCase):
     """
     Tests that the VideoDetect properties and functions work correctly.
     """
+
     @mock_sqs
     @mock_sns
     def test_publish_result_to_sqs(self):
@@ -52,7 +62,7 @@ class VideoDetectTestCase(unittest.TestCase):
 
         expected = MESSAGE_FROM_SQS % (message, published_message_id, "us-west-1")
         acquired_message = re.sub(
-            "\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
+            r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z",
             "2020-07-24T12:00:00.000Z",
             messages[0].body,
         )
@@ -71,7 +81,9 @@ class VideoDetectTestCase(unittest.TestCase):
         topics_json = conn.list_topics()
         topics = topics_json["Topics"]
         assert len(topics) == 1
-        assert topics[0]['TopicArn'] == "arn:aws:sns:{0}:{1}:{2}".format(conn._client_config.region_name, ACCOUNT_ID, topic_name)
+        assert topics[0]["TopicArn"] == "arn:aws:sns:{0}:{1}:{2}".format(
+            conn._client_config.region_name, ACCOUNT_ID, topic_name
+        )
 
         # Delete the topic
         conn.delete_topic(TopicArn=topics[0]["TopicArn"])
@@ -99,5 +111,5 @@ class VideoDetectTestCase(unittest.TestCase):
         assert "QueueUrls" not in queues_json
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
