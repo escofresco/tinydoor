@@ -63,7 +63,6 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-    "watch.apps.WatchConfig",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -78,6 +77,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "tinydoor.users.apps.UsersConfig",
     # Your stuff: custom apps go here
+    "watch.apps.WatchConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
