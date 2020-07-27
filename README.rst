@@ -36,6 +36,7 @@ Tinydoor can be applied to any industry that still relies upon providing physica
 
 How does Tinydoor work?
 ------------------------
+
 Please see the Demo_ video.
     .. _Demo: https://youtu.be/7txyTNZqXO4
 
@@ -58,6 +59,7 @@ We intend to shed a light upon one possible scenario of the future, in which AI 
 
 To read more into Tinydoor's journey so far, please see this article_ published on Medium on June 29th, 2020.
     .. _article: https://medium.com/dev-genius/computer-vision-the-cure-for-the-retail-industry-ba666421f182?source=friends_link&sk=c82350b6585e69e9c6272d016532ea02
+
 
 Technical Details
 ==================
