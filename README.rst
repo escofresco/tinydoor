@@ -60,16 +60,25 @@ Technical Details
 Running the App Locally
 ------------------------
 
-1. Fork the repo on GitHub, and download your fork onto your local machine.
-2. Be sure to install Postgres.app (if you're on macOS). If you're a Windows user, we appreciate you but unfortunately have very little experience developing on your OS. Please check out this 20 minute video_ instead.
+1. Fork the repo on GitHub, and download your fork onto your local machine. On the new GitHub UI, the fork button is found to the right of where the repo name is shown, and looks like this:
+    .. image:: https://i.postimg.cc/Y9s3DWDQ/Screen-Shot-2020-07-27-at-11-34-04-AM.png
+2. Be sure to install Postgres.app_ (if you're on macOS). If you're a Windows user, we appreciate you but unfortunately have very little experience developing on your OS. Please check out this 20 minute video_ instead.
+    .. _Postgres.app: https://postgresapp.com/
     .. _video: https://youtu.be/BLH3s5eTL4Y
-3. Install Redis
+3. Download the latest version Redis for your OS. Details can be found here_.
+    .. _here: https://redis.io/download
 4. Create a new virtual environment, name it "env" or something else listed under "Project template" on:
     .. code-block:: bash
 
         .gitignore
+
+    There are several kinds of virtual environments. If you use virutalenv, then you can start and activate your virtual environment using the commands below, respectively:
+    ::
+
+        $ python -m venv <name-for-your-virtual-environment>
+        $ source <name-for-your-virtual-environment>/bin/activate
     
-5. Install the dependencies:
+5. Install the dependencies. From the top level of the repo, run this commad:
 
 ::
 
@@ -95,8 +104,14 @@ Running the App Locally
     .. _tutorial: https://docs.aws.amazon.com/rekognition/latest/dg/api-video-roles.html
 
 9. Now it's time to run the app!
-    - Make sure that Postgres.app is running. You can verify by either clicking on the icon in the menu bar at the top of your screen. 
+    - Make sure that Postgres.app is running. You can verify by either clicking on the icon in the menu bar at the top of your screen. The green checkmark tells you it is running, like in this image below:
+
+    .. image:: https://i.postimg.cc/7LDwbCV1/Screen-Shot-2020-07-27-at-11-41-05-AM.png
+    
     - Alternatively, you can also open up the app using Spotlight Search.
+
+    .. image:: https://i.postimg.cc/wTX6zc5x/Screen-Shot-2020-07-27-at-11-43-51-AM.png
+    
     - Spin up a new Terminal window, and run the Django server.The command is below, and if you are only working on the front-end of the site it is all you will need.
 
     ::
