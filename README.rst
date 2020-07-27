@@ -36,9 +36,11 @@ Tinydoor can be applied to any industry that still relies upon providing physica
 
 How does Tinydoor work?
 ------------------------
-See the Demo: https://youtu.be/apUk86MRG2E
+Please see the Demo_ video.
+    .. _Demo: https://youtu.be/7txyTNZqXO4
 
-Tinydoor users will be able to hop on the site, https://tinydoor.co, and upload surveillance videos for free.
+Tinydoor users will be able to hop on the website_, and upload surveillance videos for free.
+    .. _website: https://tinydoor.co
 
 Then the web app will process those videos, using deep learning provided by AWS Rekognition to detect any and all facial expressions.
 
@@ -48,10 +50,14 @@ Based on how positive the facial expressions in the video file are in general, t
 What is Tinydoor's Mission?
 ------------------------------
 
+
 We need to have a larger conversation about the use of computer vision technology by businesses as well as governments.
 Tinydoor does not reveal the identities of the customers found in the videops it searches, but rather returns a lump sum score for the general sentiment of the group. 
 
 We intend to shed a light upon one possible scenario of the future, in which AI can bring value to a company while respecting customer privacy.
+
+To read more into Tinydoor's journey so far, please see this article_ published on Medium on June 29th, 2020.
+    .. _article: https://medium.com/dev-genius/computer-vision-the-cure-for-the-retail-industry-ba666421f182?source=friends_link&sk=c82350b6585e69e9c6272d016532ea02
 
 Technical Details
 ==================
