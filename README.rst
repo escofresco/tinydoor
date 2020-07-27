@@ -57,6 +57,68 @@ Technical Details
 ==================
 
 
+Running the App Locally
+------------------------
+
+1. Fork the repo on GitHub, and download your fork onto your local machine.
+2. Be sure to install Postgres.app (if you're on macOS). If you're a Windows user, we appreciate you but unfortunately have very little experience developing on your OS. Please check out this 20 minute video_ instead.
+    .. _video: https://youtu.be/BLH3s5eTL4Y
+3. Install Redis
+4. Create a new virtual environment, name it "env" or something else listed under "Project template" on:
+    .. code-block:: bash
+
+        .gitignore
+    
+5. Install the dependencies:
+
+::
+
+    $ python -m pip install -r requirements/local.txt
+
+6. Create a new file to hold your environment variables. Name it:
+    .. code-block:: bash
+
+        .env
+
+7. You will need the following keys on this file. Don't worry, we will add the values to these variables in upcoming steps:
+    .. code-block:: bash
+
+        DJANGO_AWS_ACCESS_KEY_ID
+        DJANGO_AWS_SECRET_ACCESS_KEY
+        DJANGO_AWS_REKOGNITION_REGION_NAME
+        DJANGO_AWS_CLIENT_UPLOADS_BUCKET_NAME
+        DJANGO_AWS_REKOGNITION_ROLE_ARN
+        DJANGO_AWS_STORAGE_BUCKET_NAME
+        DJANGO_AWS_S3_REGION_NAME
+
+8. Please follow the tutorial_ from AWS, it will show you how to set up the AWS services needed to run this project on your own AWS account. As you complete this tutorial, fill in the values for your environment variables above, so that your AWS account info is safe.
+    .. _tutorial: https://docs.aws.amazon.com/rekognition/latest/dg/api-video-roles.html
+
+9. Now it's time to run the app!
+    - Make sure that Postgres.app is running. You can verify by either clicking on the icon in the menu bar at the top of your screen. 
+    - Alternatively, you can also open up the app using Spotlight Search.
+    - Spin up a new Terminal window, and run the Django server.The command is below, and if you are only working on the front-end of the site it is all you will need.
+
+    ::
+
+    $ ./manage.py runserver
+
+    - If you will be doing full-stack development on the app, then you will also need to run the Redis server. Open up another Terminal window, activate your virtual environment, and run this command:
+    
+    ::
+
+    $ redis-server
+
+    - In addition to Redis, you will also need to be running Celery. Spin up a third Terminal window now, activate your virtual environment once more, and use this:
+    
+    ::
+
+    $ celery -A config.celery_app worker -l info 
+
+10. Now you are all set. For more commands to help do things such as create a super user account, to run tests, see the section below!
+
+
+
 Settings
 --------
 
@@ -125,8 +187,6 @@ To run a celery worker:
     celery -A config.celery_app worker -l info
 
 Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
-
-
 
 
 
