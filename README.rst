@@ -51,7 +51,7 @@ What is Tinydoor's Mission?
 We need to have a larger conversation about the use of computer vision technology by businesses as well as governments.
 Tinydoor does not reveal the identities of the customers found in the videops it searches, but rather returns a lump sum score for the general sentiment of the group. 
 
-We inted to shed a light upon one possible scenariovof the future, in which AI can bring value to a company while respecting customer privacy.
+We intend to shed a light upon one possible scenario of the future, in which AI can bring value to a company while respecting customer privacy.
 
 Technical Details
 ==================
