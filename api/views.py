@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+# from django.contrib.auth import get_user_model
+
 from watch.models import Score
 
 from .serializers import ScoreSerializer
@@ -7,7 +9,7 @@ from .serializers import ScoreSerializer
 
 class ScoreData(APIView):
     """
-    View to list the Scores for the videos that a user has received.
+    View to list the Scores for the videos that a user has created.
     """
 
     serializer_class = ScoreSerializer
@@ -26,7 +28,7 @@ class ScoreData(APIView):
 
         """
         # get the requested Score instances
-        scores = Score.objects.get(user=request.user)
+        scores = Score.objects.filter(user=request.user.id)
         # structure the data
         data = [score.emotion_score for score in scores]
         return Response(data)
