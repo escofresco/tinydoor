@@ -1,12 +1,9 @@
 <div class="card mb-3">
-    <h5 class="card-header ">Score {{ score.id }}</h5>
+    <h5 class="card-header ">Created {{ score.created|date:"SHORT_DATETIME_FORMAT" }}</h5>
     <div class="card-body border-dark">
       <p class="card-text text-dark">
-        {{ score.emotion_score }}
+        Emotion Score: {{ score.emotion_score }}
         <hr>
         <div class="text-right"><a href="{% url 'watched-view' score.task_id %}" title="See More">See More</a></div>
-    </div>
-    <div class="card-footer">
-      <small class="text-muted">Created {{ score.created|date:"SHORT_DATETIME_FORMAT" }}</small>
     </div>
   </div>
