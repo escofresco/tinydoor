@@ -28,18 +28,18 @@
     <h3> Your Scores {% if scores %}<small class="text-muted">({{ scores|length }} Score{{ scores|length|pluralize:"s" }})</small>{% endif %}</h3>
     <p>
       {% if scores %}
-            <div class="card-columns">
-              {% for score in scores %}
-              {% include 'partials/score_card.html' %}
-            {% endfor %}
-            </div>
-        {% else %}
-            <div class="alert alert-primary" role="alert">There are no scores to display.</div>
-        {% endif %}
+        <div class="card-columns">
+          {% for score in scores %}
+            {% include 'partials/score_card.html' %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="alert alert-primary" role="alert">There are no scores to display.</div>
+      {% endif %}
     </p>
     <hr>
     <h3>Scores Over Time</h3>
-    <canvas id="lineChart" width="1600" height="400"></canvas>
+    <canvas id="lineChart" width="1200" height="400" class="chartjs-render-monitor"></canvas>
     <hr>
   </div>
 </div>
@@ -77,26 +77,57 @@
       })
       // make line chart
       function lineChart() {
+          // make the line chart
             let ctx = document.getElementById('lineChart').getContext('2d');
             let chart = new Chart(ctx, {
             type: 'line',
             data: {
                 datasets: [{
-                    label: 'First dataset',
-                    data: [0, 20, 40, 50]
+                    label: 'Score values',
+                    // TODO: color the plot a lively shade of blue
+                    // backgroundColor: Color('rgba(21, 176, 253, .2)'),
+                    // borderColor: Color('rgba(21, 176, 253, .2)'),
+                    fill: true,
+                    data: [0, 20, 40, 50],
                 }],
                 labels: ['January', 'February', 'March', 'April']
             },
+            // Add more style to the plot
             options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            suggestedMin: 50,
-                            suggestedMax: 100
-                        }
-                    }]
-                }
-            }
+              responsive: true,
+              title: {
+                display: true,
+                text: 'Emotion Scores Over Time'
+              },
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+              },
+              hover: {
+                mode: 'nearest',
+                intersect: true
+              },
+              scales: {
+                xAxes: [{
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Date'
+                  }
+                }],
+                yAxes: [{
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Emotion Score',
+                  },
+                  ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 100
+                  }
+                }]
+              }}
+        //
         });
         }
     })
