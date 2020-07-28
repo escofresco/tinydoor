@@ -85,7 +85,7 @@ class WatchedView(TemplateView):
                     user=post_user if post_user.is_authenticated else None,
                     task_id=task_identifier,
                     emotion_score=val_score,
-                    created=timezone.now()
+                    created=timezone.now(),
                 )
                 score.save()
                 return JsonResponse({"ready": True, **async_res.get()})

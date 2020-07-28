@@ -41,7 +41,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         # get associated scores
         scores = Score.objects.filter(user=user)
         # set the context
-        context = {"object": user, "scores": scores}
+        context = {"object": user, "scores": scores, "user_id": user.id}
         return render(request, "users/user_detail.html", context)
 
 

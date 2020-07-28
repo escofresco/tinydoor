@@ -60,15 +60,15 @@
 <script>
   $(document).ready(function(){
       // get the data on the TimeStep from the API, using AJAX
-      let endpoint = '/api/score-data/'
+      let endpoint = '/api/{{ user_id }}/'
       let plotData = []
       let plotLabels = [];
       $.ajax({
           method: "GET",
           url: endpoint,
           success: function(data){
-              plotData = data.values
-              plotLabels = data.labels
+              plotData = data.scores
+              plotLabels = data.dates
               lineChart()
           },
           error: function(error_data){
@@ -88,9 +88,9 @@
                     // backgroundColor: Color('rgba(21, 176, 253, .2)'),
                     // borderColor: Color('rgba(21, 176, 253, .2)'),
                     fill: true,
-                    data: [0, 20, 40, 50],
+                    data: plotData,
                 }],
-                labels: ['January', 'February', 'March', 'April']
+                labels: plotLabels
             },
             // Add more style to the plot
             options: {
@@ -122,8 +122,8 @@
                     labelString: 'Emotion Score',
                   },
                   ticks: {
-                    suggestedMin: 50,
-                    suggestedMax: 100
+                    suggestedMin: 0,
+                    suggestedMax: 1
                   }
                 }]
               }}

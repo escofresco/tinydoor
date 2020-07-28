@@ -1,10 +1,9 @@
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from watch.models import Score
 
 from .serializers import ScoreSerializer
-
-# from django.contrib.auth import get_user_model
 
 
 class ScoreData(APIView):
@@ -16,19 +15,29 @@ class ScoreData(APIView):
     authentication_classes = list()
     permission_classes = list()
 
-    def get(self, request):
+    def get(self, request, pk):
         """Return a list of emotion_scores and dates for all Scores
            associated with a given User.
 
            Parameters:
            request(HttpRequest): the GET request sent to the server
+           pk (int): the id value of the User making the request
 
            Returns:
            Response: holds the data on the Scores from the database
 
         """
+        # get the user
+        User = get_user_model()
+        user = User.objects.get(id=pk)
         # get the requested Score instances
-        scores = Score.objects.filter(user=request.user.id)
+        scores = Score.objects.filter(user=user)
         # structure the data
-        data = [score.emotion_score for score in scores]
+        score_data, score_dates = list(), list()
+        for score in list(scores):
+            score_data.append(score.emotion_score)
+            score_dates.append(score.created)
+        data = dict()
+        data["scores"] = score_data
+        data["dates"] = score_dates
         return Response(data)
