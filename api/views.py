@@ -1,10 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# from django.contrib.auth import get_user_model
-
 from watch.models import Score
 
 from .serializers import ScoreSerializer
+
+# from django.contrib.auth import get_user_model
 
 
 class ScoreData(APIView):
