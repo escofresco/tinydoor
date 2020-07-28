@@ -24,8 +24,8 @@
     <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
     <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
     <!-- Your Stuff: Custom user template urls -->
+    <canvas id="lineChart" width="1600" height="400"></canvas>
   </div>
-
 </div>
 <!-- End Action buttons -->
 {% endif %}
@@ -33,4 +33,57 @@
 
 </div>
 {% endblock content %}
+
+{% block javascript %}
+{{ block.super }}
+<!-- jQuery and Ajax needed for Chart.js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+
+<!-- Chart Making Script -->
+<script>
+  $(document).ready(function(){
+      // get the data on the TimeStep from the API, using AJAX
+      let endpoint = '/api/score-data/'
+      let plotData = []
+      let plotLabels = [];
+      $.ajax({
+          method: "GET",
+          url: endpoint,
+          success: function(data){
+              plotData = data.values
+              plotLabels = data.labels
+              lineChart()
+          },
+          error: function(error_data){
+              console.log(error_data)
+          }
+      })
+      // make line chart
+      function lineChart() {
+            let ctx = document.getElementById('lineChart').getContext('2d');
+            let chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'First dataset',
+                    data: [0, 20, 40, 50]
+                }],
+                labels: ['January', 'February', 'March', 'April']
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 50,
+                            suggestedMax: 100
+                        }
+                    }]
+                }
+            }
+        });
+        }
+    })
+</script>
+{% endblock javascript %}
 
