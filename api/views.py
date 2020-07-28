@@ -6,25 +6,28 @@ from .serializers import ScoreSerializer
 
 
 class ScoreData(APIView):
-    """View to list the times a user has achieved or failed at a Goal."""
+    """
+    View to list the Scores for the videos that a user has received.
+    """
 
     serializer_class = ScoreSerializer
     authentication_classes = list()
     permission_classes = list()
 
-    def get(self, request, pk, format=None):
-        """Return a list of the data for one Goal with fields and values.
+    def get(self, request):
+        """Return a list of emotion_scores and dates for all Scores
+           associated with a given User.
+
            request(HttpRequest): the GET request sent to the server
-           pk(int): unique id value of an Goal instance
-           format(str): the suffix applied to the endpoint to indicate how the
-                        data is structured (i.e. html, json)
+           
            Returns:
-           Response: holds the data on the Goal from the database
+           Response: holds the data on the Scores from the database
+
         """
-        # get the requested Goal instance
-        goal = Score.objects.get(id=pk)
-        data = {
-            "labels": ["Achievements", "Fails"],
-            "values": [goal.achievements, goal.fails],
-        }
+        # get the requested Score instances
+        scores = Score.objects.get(user=request.user)
+        # structure the data
+        data = [
+            
+        ]
         return Response(data)
