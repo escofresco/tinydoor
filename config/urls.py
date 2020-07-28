@@ -8,12 +8,12 @@ from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
+    # Django Admin, use {% url 'admin:index' %}
+    path(settings.ADMIN_URL, admin.site.urls),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
     path("", include("watch.urls")),
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("tinydoor.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
