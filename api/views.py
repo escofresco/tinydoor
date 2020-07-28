@@ -18,8 +18,9 @@ class ScoreData(APIView):
         """Return a list of emotion_scores and dates for all Scores
            associated with a given User.
 
+           Parameters:
            request(HttpRequest): the GET request sent to the server
-           
+
            Returns:
            Response: holds the data on the Scores from the database
 
@@ -27,7 +28,5 @@ class ScoreData(APIView):
         # get the requested Score instances
         scores = Score.objects.get(user=request.user)
         # structure the data
-        data = [
-            
-        ]
+        data = [score.emotion_score for score in scores]
         return Response(data)
