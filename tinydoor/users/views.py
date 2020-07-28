@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView
-
 from watch.models import Score
 
 User = get_user_model()
@@ -35,18 +34,15 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         # error handling
         if len(user) != 1:
             # correct user not found
-            raise Http404('User was not found')
+            raise Http404("User was not found")
         else:
             # set the user to the User instance found
             user = user.first()
         # get associated scores
         scores = Score.objects.filter(user=user)
         # set the context
-        context = {
-            'object': user,
-            'scores': scores
-        }
-        return render(request, 'users/user_detail.html', context)
+        context = {"object": user, "scores": scores}
+        return render(request, "users/user_detail.html", context)
 
 
 user_detail_view = UserDetailView.as_view()
