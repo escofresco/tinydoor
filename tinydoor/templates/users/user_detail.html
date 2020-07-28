@@ -23,13 +23,24 @@
   <div class="col-sm-12">
     <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
     <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-    <!-- Your Stuff: Custom user template urls -->
+    <hr>
+    <!-- Display the Score this User has Created -->
+    <h3> Your Scores {% if scores %}<small class="text-muted">({{ scores|length }} Score{{ scores|length|pluralize:"s" }})</small>{% endif %}</h3>
     <p>
-      {% for score in score %}
-        {{ score.emotion_score }}
-      {% endfor %}
+      {% if scores %}
+            <div class="card-columns">
+              {% for score in scores %}
+              {% include 'partials/score_card.html' %}
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-primary" role="alert">There are no scores to display.</div>
+        {% endif %}
     </p>
+    <hr>
+    <h3>Scores Over Time</h3>
     <canvas id="lineChart" width="1600" height="400"></canvas>
+    <hr>
   </div>
 </div>
 <!-- End Action buttons -->
