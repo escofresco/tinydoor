@@ -16,6 +16,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     slug_field = "username"
     slug_url_kwarg = "username"
+    template_name = "users/user_detail.html"
 
     def get(self, request, username):
         """
@@ -42,7 +43,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         scores = Score.objects.filter(user=user)
         # set the context
         context = {"object": user, "scores": scores, "user_id": user.id}
-        return render(request, "users/user_detail.html", context)
+        return render(request, self.template_name, context)
 
 
 user_detail_view = UserDetailView.as_view()
