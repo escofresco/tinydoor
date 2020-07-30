@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.generic import TemplateView
 
 from .forms import EmptyForm
@@ -84,6 +85,7 @@ class WatchedView(TemplateView):
                     user=post_user if post_user.is_authenticated else None,
                     task_id=task_identifier,
                     emotion_score=val_score,
+                    created=timezone.now(),
                 )
                 score.save()
                 return JsonResponse({"ready": True, **async_res.get()})

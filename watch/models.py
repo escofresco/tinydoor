@@ -21,6 +21,7 @@ class Score(models.Model):
         blank=True,
         null=True,
     )
+    created = models.DateTimeField("Date and time the score was saved.")
 
     def __str__(self):
         """Return a string representation of the Score."""
