@@ -79,11 +79,11 @@
             let chart = new Chart(ctx, {
             type: 'line',
             data: {
+                // color the plot and add data, label axes
                 datasets: [{
                     label: 'Score values',
-                    // TODO: color the plot a lively shade of blue
-                    // backgroundColor: Color('rgba(21, 176, 253, .2)'),
-                    // borderColor: Color('rgba(21, 176, 253, .2)'),
+                    backgroundColor: "rgba(21, 176, 253, .2)",
+                    borderColor: "rgb(75, 192, 192)",
                     fill: true,
                     data: plotData,
                 }],
