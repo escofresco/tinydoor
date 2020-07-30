@@ -20,6 +20,10 @@
   <div class="col-sm-12">
     <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
     <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
+    <!-- Superusers may also view the Admin site -->
+    {% if object.is_staff is True %}
+      <a class="btn btn-primary" href="{% url 'admin:index' %}" role="button">Admin Site</a>
+    {% endif %}
     <hr>
     <!-- Display the Score this User has Created -->
     <h3> Your Scores {% if scores %}<small class="text-muted">({{ scores|length }} Score{{ scores|length|pluralize:"s" }})</small>{% endif %}</h3>
