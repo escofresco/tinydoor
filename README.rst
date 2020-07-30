@@ -218,6 +218,13 @@ Email Server
 
 In development, it is often nice to be able to see emails that are being sent from your application. If you choose to use `MailHog`_ when generating the project a local SMTP server with a web interface will be available.
 
+If you do not choose to use MailHog, you will still be able to see the emails being sent. They will be printed on whichever Terminal window is running the Django server.
+To be clear, this Terminal window is where you ran this command:
+
+.. code-block:: bash
+
+    ./manage.py runserver
+
 #. `Download the latest MailHog release`_ for your OS.
 
 #. Rename the build to ``MailHog``.
@@ -268,7 +275,7 @@ See detailed `cookiecutter-django Heroku documentation`_.
 
 
 Custom Bootstrap Compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The generated CSS is set up with automatic Bootstrap recompilation with variables of your choice.
 Bootstrap v4 is installed using npm and customised by tweaking your variables in ``static/sass/custom_bootstrap_vars``.
