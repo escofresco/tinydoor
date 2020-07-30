@@ -35,8 +35,21 @@ class ScoreData(APIView):
         # structure the data
         score_data, score_dates = list(), list()
         for score in list(scores):
+            # add the emotion score for this instance
             score_data.append(score.emotion_score)
-            score_dates.append(score.created)
+            # format the date and time shown for this score
+            score_dates.append(
+                f"{score.created.month}"
+                + "/"
+                + f"{score.created.day}"
+                + "/"
+                + f"{score.created.year} "
+                + f"{score.created.hour}"
+                + ":"
+                + f"{score.created.minute}"
+                + ":"
+                + f"{score.created.second}"
+            )
         data = dict()
         data["scores"] = score_data
         data["dates"] = score_dates
