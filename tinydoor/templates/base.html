@@ -25,14 +25,14 @@
     {% compress css %}
     <!-- This file stores project-specific CSS -->
 
-    {# <link href="{% static 'css/project.css' %}" rel="stylesheet"> #}
-
+    {#<link href="{% static 'css/project.css' %}" rel="stylesheet">#}
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
     {% endcompress %}
     {% endblock %}
 
   </head>
 
-  <body style="background-color: #fcf0e3;">
+  <body>
       {% comment %}
     <div class="mb-1">
       <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -74,12 +74,14 @@
 
     </div>
     {% endcomment %}
-    <div class="navbar-container" style="position: relative; z-index: 1 !important;">
-      <div style="background-color: #fcf0e3;" data-sticky="top">
-        <div class="container">
-          <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="{% url 'home' %}">
-              <img alt="Tinydoor" style="width:70px;height:70px;" src="{% static 'images/tinydoor.png' %}" />
+    {% block navbar %}
+  <div class="navbar-container">
+    <div class="bg-transparent fixed-top navbar-light" style="position: relative; z-index: 1 !important;">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand img-lightlight" href="{% url 'home' %}">
+              <img class="" alt="tiny door" style="width:70px;height:70px;" src="{% static 'images/logo/gray.svg' %}" />
+              <span class="text-darkish"><strong>tiny door</strong></span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <i class="icon-menu h4"></i>
@@ -87,20 +89,20 @@
             <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a href="{% url 'about' %}" class="nav-link">Overview</a>
+                  <a class="text-lightlight" href="{% url 'about' %}" class="nav-link">Overview</a>
                 </li>
               </ul>
 
-              <ul class="navbar-nav">
+              <ul class="navbar-nav bg-transparent navbar-light">
                   {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                      <a href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
-                      <span>&nbsp;or&nbsp;</span><a href="{% url 'account_logout' %}">{% trans " Sign Out" %}</a>
+                      <a class="text-lightlight" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
+                      <span>&nbsp;or&nbsp;</span><a class="text-lightlight" href="{% url 'account_logout' %}">{% trans " Sign Out" %}</a>
                     </li>
                   {% else %}
                     <li class="nav-item">
-                      <a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-                      <span>&nbsp;or&nbsp;</span><a href="{% url 'account_login' %}">{% trans " Sign In" %}</a>
+                      <a class="text-lightlight" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                      <span >&nbsp;or&nbsp;</span><a class="text-lightlight" class="text-muted" href="{% url 'account_login' %}">{% trans " Sign In" %}</a>
                     </li>
                   {% endif %}
               </ul>
@@ -110,9 +112,10 @@
           </nav>
         </div>
         <!--end of container-->
-      </div>
     </div>
-    <div class="container">
+    {% endblock navbar %}
+
+    <div id="big-thing" class="main-container">
 
       {% if messages %}
           {% for message in messages %}
@@ -127,6 +130,85 @@
     </div> <!-- /container -->
 
     {% block modal %}{% endblock modal %}
+
+    {% block footer %}
+    <footer class="text-light footer-long">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-3">
+            <img alt="Image" src="{% static 'images/logo/dark-gray-outline.svg' %}" class="mb-4 text-darkish img-lightlight" />
+            <p class="text-darkish">
+              <span class="text-darkish">&copy; 2020 Tiny Door</span>
+              <br /><span class="text-darkish">Using emotions to measure</span>
+              <br /><span class="text-darkish">customer experience.</span>
+            </p>
+          </div>
+          <!--end of col-->
+          <div class="col-12 col-md-9">
+            <span class="h5"></span>
+            <div class="row no-gutters">
+            <div class="text-darkish col-6 col-lg-3">
+              <h6 class="text-darkish">Product</h6>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-darkish" href="#">Scoring</a>
+                </li>
+              </ul>
+            </div>
+            <!--end of col-->
+            <div class="text-darkish col-6 col-lg-3">
+              <h6 class="text-darkish">Developers</h6>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-darkish" href="https://github.com/escofresco/tinydoor">Contribute</a>
+                </li>
+              </ul>
+            </div>
+            <!--end of col-->
+              <div class="text-darkish col-6 col-lg-3">
+                <h6 class="text-darkish">Company</h6>
+                <ul class="list-unstyled">
+                  <li>
+                    <a class="text-darkish" href="{% url 'about' %}">Blog</a>
+                  </li>
+                  <li>
+                    <a class="text-darkish" href="{% url 'about' %}">Sitemap</a>
+                  </li>
+                </ul>
+              </div>
+              <!--end of col-->
+              <div class="text-darkish col-6 col-lg-3">
+                <h6 class="text-darkish">Resources</h6>
+                <ul class="list-unstyled">
+                  <li>
+                    <a class="text-darkish" href="#">FAQ</a>
+                  </li>
+                  <li>
+                    <a class="text-darkish" href="#">Contact</a>
+                  </li>
+                  <li>
+                    <a class="text-darkish" href="#">Support</a>
+                  </li>
+                  <li>
+                    <a class="text-darkish" href="#">Privacy &amp; terms</a>
+                  </li>
+                  <li>
+                    <a class="text-darkish" href="#">Sitemap</a>
+                  </li>
+                </ul>
+              </div>
+              <!--end of col-->
+            </div>
+            <!--end of row-->
+          </div>
+          <!--end of col-->
+        </div>
+        <!--end of row-->
+      </div>
+      <!--end of container-->
+    </footer>
+    {% endblock footer %}
+
 
     <!-- Le javascript
     ================================================== -->

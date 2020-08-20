@@ -1,8 +1,46 @@
-/* 
-/* 
+/*
+/*
 /*  custom.css
 /*
 /*  If not using Gulp and Sass, add your custom CSS below then include it
 /*  in your page by adding a reference to assets/css/custom.css in the head of each page.
 /*
 */
+
+html,body{
+    height: 100%
+}
+
+.text-lightlight {
+    color: rgb(52,58,64,0.75) !important;
+    transition: .618s;
+}
+
+.text-lightlight:hover {
+    color: rgb(52,58,64,.25) !important;
+}
+
+.text-lightlightlight {
+    color: rgb(52,58,64,0.25) !important;
+    transition: .618s;
+}
+
+.img-lightlight {
+    opacity: .75 !important;
+    transition: .618s;
+}
+
+.img-lightlight:hover {
+    opacity: .25 !important;
+}
+
+.text-darkish {
+    /* background-color: rgb(52,58,64,.005) !important; */
+    color: rgb(52,58,64,0.75) !important;
+    transition: .618s;
+}
+
+.text-darkish:hover {
+    /* background-color: rgb(52,58,64,.005) !important; */
+    color: rgb(52,58,64,.25) !important;
+}

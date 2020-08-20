@@ -1,10 +1,11 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
-
+{% load static %}
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
 {% block inner %}
+{% comment %}
 <h1>{% trans "Sign Out" %}</h1>
 
 <p>{% trans 'Are you sure you want to sign out?' %}</p>
@@ -16,7 +17,49 @@
   {% endif %}
   <button class="btn btn-danger" type="submit">{% trans 'Sign Out' %}</button>
 </form>
-
-
+{% endcomment %}
+<section class="space-sm">
+  <div class="container align-self-start">
+    <div class="row mb-5">
+      <div class="col text-center">
+        <a href="{% url 'home' %}">
+          <img class="img-lightlight" alt="Image" style="width:70px;height:70px;" src="{% static 'images/logo/gray.svg' %}" />
+        </a>
+      </div>
+      <!--end of col-->
+    </div>
+    <!--end of row-->
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-7">
+        <div class="card card-lg text-center">
+              <div class="text-center space-sm">
+                <img src="{% static 'images/surr/surr-logged-out.png' %}" style="width: 25%;" class="card-img" alt="Logged Out">
+              </div>
+              <div class="card-body">
+                <div class="mb-4">
+                  <h2 class="mb-2"{% trans 'Sign Out' %}</h2>
+                  <span>{% trans 'Are you sure you want to sign out?' %}</span>
+                </div>
+                <div class="row no-gutters justify-content-center">
+                    <form method="post" action="{% url 'account_logout' %}">
+                      {% csrf_token %}
+                      {% if redirect_field_value %}
+                      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                      {% endif %}
+                      <button class="btn btn-danger btn-lg" type="submit">{% trans 'Sign Out' %}</button>
+                    </form>
+                </div>
+                <!--end of row-->
+              </div>
+              <!--end of card body-->
+            </div>
+        </div>
+      </div>
+      <!--end of col-->
+    </div>
+    <!--end of row-->
+  </div>
+  <!--end of container-->
+</section>
+<!--end of section-->
 {% endblock %}
-

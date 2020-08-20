@@ -1,11 +1,12 @@
 {% extends "account/base.html" %}
 
-{% load i18n %}
+{% load i18n static %}
 {% load crispy_forms_tags %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block inner %}
+{% comment %}
 <h1>{% trans "Sign Up" %}</h1>
 
 <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
@@ -18,6 +19,96 @@
   {% endif %}
   <button class="btn btn-primary" type="submit">{% trans "Sign Up" %} &raquo;</button>
 </form>
+{% endcomment %}
+<section class="fullwidth-split">
+  <div class="container-fluid">
+    <div class="row no-gutters height-100 justify-content-center">
+      <div id="left-panel" class="col-12 col-lg-6 fullwidth-split-image bg-transparent d-flex justify-content-center align-items-center">
+        <div class="col-12 col-sm-8 col-lg-9 text-center pt-5 pb-5">
+          <img alt="Image" style="opacity: .75;" src="{% static 'images/logo/white.svg' %}" class=" mb-4 logo-lg" />
+          <span style="opacity: .75;" class="h3 text-white mb-5"><strong>Start listening to how your customers</strong> <i><strong>feel</strong></i></span>
 
+          {% comment %}
+          <div class="card text-left">
+            <div class="card-body">
+              <div class="media">
+                <img alt="Image" src="" class="avatar" />
+                <div class="media-body">
+                  <p class="mb-1">
+                    “Using other templates just doesn’t feel the same anymore - none have the polish and intuitive design of Wingman”
+                  </p>
+                  <small>Lucille Freebody, Product Designer</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endcomment %}
+        </div>
+        <!--end of col-->
+      </div>
+      <!--end of col-->
+      <div class="col-12 col-sm-8 col-lg-6 fullwidth-split-text">
+        <div class="col-12 col-lg-8 align-self-center">
+          <div class="text-center mb-5">
+            <h1 class="h2 mb-2">Get started</h1>
+            <span>Create your tiny door account</span>
+          </div>
+          <form class="mb-4 signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+              {% csrf_token %}
+              {{ form|crispy }}
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-lg btn-success animation-reaction">Create Account</button>
+            </div>
+          </form>
+          <div class="text-center">
+            <span class="text-small">Already have an account? <a class="animation-reaction" href="{{ login_url }}">Log in here</a>
+            </span>
+          </div>
+        </div>
+        <!--end of col-->
+      </div>
+      <!--end of col-->
+    </div>
+    <!--end of row-->
+  </div>
+  <!--end of container-->
+</section>
+{% block footer %}{% endblock footer %}
+<!--end of section-->
 {% endblock %}
 
+{% block javascript %}
+{{ block.super }}
+<script src="{% static 'js/three.min.js' %}"></script>
+<script src="{% static 'js/vanta.fog.min.js' %}"></script>
+<script>
+const effect = VANTA.FOG({
+  el: "#left-panel",
+  mouseControls: true,
+  touchControls: true,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  highlightColor: 0x02b875,
+  midtoneColor: 0x02b875,
+    lowlightColor: 0x02b875,
+    baseColor: 0x495057,
+    speed: .95,
+    blurFactor: 0.25,
+    zoom: 0.75
+});
+
+$(".animation-reaction").hover(
+    () => {
+        effect.setOptions({
+            speed: 5
+        })
+    }, () => {
+        effect.setOptions({
+            speed: .95
+        })
+});
+</script>
+{% endblock javascript %}

@@ -1,16 +1,16 @@
-{% extends "account/base.html" %}
-{% load i18n %}
+ {% extends "account/base.html" %}
+{% load i18n static %}
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 {% block content %}
 
-<section class="space-sm">
+<section id="main-section" class="space-sm">
   <div class="container align-self-start">
     <div class="row mb-5">
       <div class="col text-center">
-        <a href="#">
-          <img alt="Image" src="assets/img/logo-gray.svg" />
+        <a href="{% url 'home' %}">
+          <img class="img-lightlight" alt="Image" style="width:70px;height:70px;" src="{% static 'images/logo/gray.svg' %}" />
         </a>
       </div>
       <!--end of col-->
@@ -21,8 +21,7 @@
         <div class="card card-lg text-center">
           <div class="card-body">
             <div class="mb-5">
-              <h1 class="h2 mb-2">Hello again</h1>
-              <span>Sign in to your account to continue</span>
+              <h1 class="h3 mb-1">Sign in to your account</h1>
             </div>
             <div class="row no-gutters justify-content-center">
               <form class="text-left col-lg-8 login" method="POST" action="{% url 'account_login' %}">
@@ -51,7 +50,7 @@
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                     {% endif %}
                     <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-                    <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+                    <button class="animation-reaction primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
                     {% comment %}
                   <button type="submit" class="btn btn-lg btn-primary">Log in</button>
                   {% endcomment %}
@@ -63,7 +62,7 @@
           </div>
         </div>
         <div class="text-center">
-          <span class="text-small">Don't have an account yet? <a href="#">Create one</a>
+          <span class="text-muted">Don't have an account yet? <a href="{% url 'account_signup' %}">Create one</a>
           </span>
         </div>
       </div>
@@ -71,3 +70,39 @@
     </div>
     <!--end of row-->
 {% endblock content %}
+
+
+{% block javascript %}
+{{ block.super }}
+<script src="{% static 'js/three.min.js' %}"></script>
+<script src="{% static 'js/vanta.fog.min.js' %}"></script>
+<script>
+const effect = VANTA.FOG({
+  el: "#main-section",
+  mouseControls: true,
+  touchControls: true,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  highlightColor: 0xffffff,
+  midtoneColor: 0xc9cbcd,
+  lowlightColor: 0x7f8891,
+  baseColor: 0xffffff,
+  blurFactor: 0.1,
+  speed: 2.30,
+  zoom: 2.80
+});
+
+$(".animation-reaction").hover(
+    () => {
+        effect.setOptions({
+            speed: 5,
+            blurFactor: .15
+        })
+    }, () => {
+        effect.setOptions({
+            speed: 1.5,
+            blurFactor: .1
+        })
+});
+</script>
+{% endblock javascript %}

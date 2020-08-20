@@ -9,42 +9,42 @@
 
 {% block content %}
 
-
-    <div class="container">
-      <div class="row justify-content-around align-items-center">
-        <div class="col-8 col-md-7 col-lg-6 order-md-2 mb-5 mb-md-0">
-          <img alt="Image" src="{% static 'images/pablo-face-recognition.png' %}" class="w-100" />
-        </div>
-        <!--end of col-->
-        <div class="col-12 col-md-6 col-lg-5 order-md-1">
-          <h1 class="display-4">Measure User Satisfaction</h1>
-          <span class="lead">
-            A robust way to score the experience of your customers, one video
-            at a time.
-          </span>
-          <div class="mb-4">
-            <span class="text-muted text-small">Get started by trying a demo.</span>
+    <section class="main-section bg-white space-md">
+      <div class="container">
+        <div class="row align-items-center justify-content-around">
+          <div class="col-12 col-md-6 col-lg-5 text-center text-md-left section-intro">
+            <h1 class="display-3">Take control of customer experience.</h1>
+            <span class="lead">
+              Surveys are antiquated. Use emotions to quantify .
+            </span>
+            <a href="#" id="browse" class="animation-reaction btn btn-success btn-lg">Start now</a>
           </div>
-          <button id='browse' class="btn btn-primary btn-lg">Get started now</button>
-          <a href="{% url 'about' %}" class="btn btn-link btn-lg"><i class="icon-controller-play">&nbsp;</i>Why Tiny Door</a>
+          <!--end of col-->
+          <div class="col-12 col-md-6 col-lg-6">
+            <img alt="Image" class="img-fluid w-100" src="{% static 'images/surr/surr-searching.png' %}" />
+          </div>
+          <!--end of col-->
         </div>
-        <!--end of col-->
+        <!--end of row-->
       </div>
-      <!--end of row-->
-    </div>
-    <!--end of container-->
-  <!--end of section-->
+      <!--end of container-->
+    </section>
+    <!--end of section-->
 {% endblock content %}
 
 {% block javascript %}
 {{ block.super }}
-<!-- This pulls Uppy from our CDN. Alternatively use `npm i @uppy/robodog --save` -->
+<!-- This pulls Uppy from our CDN. Alternatively use `npm i @uppy/robodog save` -->
 <!-- if you want smaller self-hosted bundles and/or to use modern JavaScript -->
 <script src="//transloadit.edgly.net/releases/uppy/robodog/v1.6.4/robodog.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://transloadit.edgly.net/releases/uppy/v1.16.1/uppy.min.js"></script>
-<script>
 
+<!-- Background Animation -->
+<script src="{% static 'js/three.min.js' %}"></script>
+<script src="{% static 'js/vanta.fog.min.js' %}"></script>
+
+<script>
 document.getElementById('browse').addEventListener('click', function () {
   var uppy = window.Robodog.pick({
     providers: [ 'instagram', 'url', 'webcam', 'dropbox', 'google-drive', 'facebook', 'onedrive' ],
@@ -80,5 +80,33 @@ function startWatching(furl) {
         }
     });
 }
+
+const effect = VANTA.FOG({
+  el: ".main-section",
+  mouseControls: true,
+  touchControls: true,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  highlightColor: 0xffffff,
+  midtoneColor: 0xc9cbcd,
+  lowlightColor: 0x7f8891,
+  baseColor: 0xffffff,
+  blurFactor: 0.1,
+  speed: 2.30,
+  zoom: 2.80
+});
+
+$(".animation-reaction").hover(
+    () => {
+        effect.setOptions({
+            speed: 5,
+            blurFactor: .15
+        })
+    }, () => {
+        effect.setOptions({
+            speed: 3,
+            blurFactor: .1
+        })
+});
 </script>
 {% endblock javascript %}
