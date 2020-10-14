@@ -3,7 +3,6 @@ import unittest
 
 from doorknob.foyer import Scene
 
-
 class SceneTestCase(unittest.TestCase):
     def test_valence(self):
         filename = "doorknob/tests/long_rekognition_face_response.txt"
