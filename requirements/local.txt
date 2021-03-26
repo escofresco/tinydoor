@@ -122,7 +122,7 @@ python-jose==3.1.0
 python-slugify==4.0.0
 python3-openid==3.2.0
 pytz==2020.1
-PyYAML==5.3.1
+PyYAML==5.4
 rcssmin==1.0.6
 redis==3.5.0
 regex==2020.7.14
