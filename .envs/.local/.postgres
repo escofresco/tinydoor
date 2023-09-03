@@ -1,7 +1,0 @@
-# PostgreSQL
-# ------------------------------------------------------------------------------
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=tinydoor
-POSTGRES_USER=KZKqnpmUrTMGrBhsOIVUXzOyFQjLFajH
-POSTGRES_PASSWORD=r6ms39IcCn6Ft0YsmzLiPqiByTZtywjEQniPkgy70Trp1PgYJTRxTPihgMKwWEY2
